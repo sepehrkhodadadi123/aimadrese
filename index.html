@@ -7,20 +7,105 @@
 
 .brand{display:flex;align-items:center;min-width:0}.brand-logo{display:block;width:175px;max-width:100%;height:auto;object-fit:contain}
 @media(max-width:380px){.brand-logo{width:145px}}
+
+/* Dashboard home inspired by the supplied visual reference */
+.screen:has(.dashboard-home){padding:14px 14px 20px;background:#f6fbff}
+.dashboard-home{display:flex;flex-direction:column;gap:13px;padding-bottom:12px}
+.dashboard-banner{background:linear-gradient(135deg,#0794ff,#0874e8);border-radius:24px;padding:22px 17px 20px;color:#fff;text-align:center;position:relative;overflow:hidden;box-shadow:0 9px 23px #087df429}
+.dashboard-banner:after{content:'';position:absolute;left:-18%;right:-18%;bottom:-70px;height:95px;border-radius:50%;background:#ffffff14}
+.dashboard-banner h1{font-size:23px;line-height:1.65;margin:0 0 8px;font-weight:800}
+.dashboard-banner p{font-size:13px;line-height:1.9;margin:0 0 16px;color:#e9f6ff}
+.dashboard-cta{position:relative;z-index:1;border:0;border-radius:40px;background:linear-gradient(180deg,#24dfd5,#069bdc);color:#fff;font-weight:800;padding:12px 25px;box-shadow:0 5px 0 #047ab6,0 9px 18px #024d9b36}
+.dashboard-panel{background:#fff;border:1px solid #e2eefa;border-radius:21px;padding:15px;box-shadow:0 5px 16px #0a467311}
+.dashboard-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;text-align:center}
+.dashboard-stat{padding:7px 3px;border-radius:14px;background:#f1f9ff}
+.dashboard-stat strong{display:block;font-size:19px;color:#087cdb;line-height:1.5}
+.dashboard-stat span{display:block;font-size:10px;color:#58748b;line-height:1.8}
+.dashboard-focus{text-align:center;color:#233c5b;font-size:12px;margin:10px 0 0;font-weight:700}
+.dashboard-focus b{color:#0879db}
+.dashboard-suggest{display:flex;gap:10px;align-items:center;background:linear-gradient(120deg,#e4f5ff,#fff9e8);border:1px solid #d8e8f3;border-radius:19px;padding:13px 11px;box-shadow:0 4px 13px #0c4b7a10}
+.dashboard-robot{flex:none;width:68px;height:72px;display:flex;align-items:center;justify-content:center;font-size:49px;background:#d9f8fb;border-radius:17px}
+.dashboard-suggest h3{margin:0 0 4px;font-size:14px;color:#173c63}
+.dashboard-suggest p{margin:0;font-size:12px;line-height:1.8;color:#46647b}
+.dashboard-suggest .btn{font-size:11px;padding:7px 12px;margin-top:8px;border-radius:10px}
+.dashboard-shortcuts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.dashboard-shortcut{background:#fff;border:1px solid #dfeefa;border-radius:17px;padding:15px 4px 13px;text-align:center;box-shadow:0 4px 12px #0c4b7a10;color:#203c5b;font-size:12px;font-weight:700}
+.dashboard-shortcut span{display:block;font-size:30px;margin-bottom:5px}
+.dashboard-section-heading{text-align:center;font-size:14px;color:#23405d;font-weight:800;background:#eef7ff;border-radius:25px;padding:9px;margin:0 0 10px}
+.dashboard-chart{width:100%;height:auto;display:block}
+.dashboard-legend{display:flex;justify-content:center;gap:13px;flex-wrap:wrap;font-size:10px;color:#5d7386;margin:9px 0}
+.dashboard-legend i{display:inline-block;width:12px;height:4px;border-radius:3px;margin-left:3px;vertical-align:middle}
+.dashboard-chart-note{text-align:center;font-size:10px;color:#8399a9;margin:4px 0 0}
+.dashboard-pills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:12px}
+.dashboard-pill{border-radius:20px;padding:8px 3px;text-align:center;color:white;font-size:10px;font-weight:700;background:#1787ef}
+.dashboard-pill:nth-child(2){background:#46b95a}.dashboard-pill:nth-child(3){background:#ff891e}
+@media(max-width:360px){.dashboard-banner h1{font-size:19px}.dashboard-legend{gap:6px}}
+
+.guest-welcome{max-width:420px;margin:24px auto;padding:25px 20px;background:white;border:1px solid #e5eef6;border-radius:24px;box-shadow:0 8px 30px #087df411;text-align:center}.guest-welcome>img{width:185px;max-width:90%;height:auto;object-fit:contain}.guest-welcome h1{font-size:20px;color:#0758ac;margin:12px 0}.guest-welcome p{color:#667d96;font-size:13px;line-height:2}.guest-welcome form{display:flex;flex-direction:column;gap:9px;text-align:right;margin-top:22px}.guest-welcome label{font-size:13px;font-weight:700;color:#284865}.guest-welcome input,.guest-welcome select{width:100%;padding:13px;border:1px solid #dce8f3;border-radius:12px;background:#fbfdff;font:inherit;margin-bottom:8px}.guest-welcome form button{margin-top:10px;background:#087df4;color:#fff;border:0;border-radius:13px;padding:14px;font:inherit;font-weight:700}.guest-welcome small{display:block;margin-top:16px;color:#7890a5;line-height:1.9}
 </style></head><body><div class="wrap"><header class="header"><div class="brand"><img src="/aimadrese-logo.png" alt="ای‌آی مدرسه" class="brand-logo"></div></header><main class="screen" id="screen"></main><div class="composer hidden" id="composer"><div id="attachment-preview" class="attachment-preview hidden"><span id="attachment-name"></span><button id="remove-attachment" type="button">حذف ×</button></div><input type="file" id="image-file" accept="image/jpeg,image/png,image/webp" aria-label="انتخاب عکس"><button id="pick-image" class="tool-btn" type="button" title="ارسال عکس" aria-label="ارسال عکس">📷</button><button id="record-voice" class="tool-btn" type="button" title="ضبط ویس" aria-label="ضبط ویس">🎙️</button><input id="question" placeholder="سؤالت رو بپرس..." aria-label="سؤال درسی"><button id="send" class="send-btn" aria-label="ارسال">➤</button></div><nav class="nav" id="nav"><button data-page="home"><span>⌂</span>خانه</button><button data-page="plan"><span>▦</span>برنامه</button><button data-page="assistant"><span>🤖</span>دستیار</button><button data-page="courses"><span>▤</span>دوره‌ها</button><button data-page="profile"><span>♙</span>پروفایل</button></nav></div>
 <script>
 (()=>{const $=s=>document.querySelector(s),screen=$('#screen'),composer=$('#composer'),input=$('#question');
-const defaultState={name:'دانش‌آموز',grade:'دوازدهم',tasks:[false,false,false],messages:[],page:'home'};
-let s;try{s={...defaultState,...JSON.parse(localStorage.getItem('aimadrese-demo')||'{}')}}catch{s={...defaultState}}
-const save=()=>localStorage.setItem('aimadrese-demo',JSON.stringify(s));
+const defaultState={name:'دانش‌آموز',lastName:'',grade:'دوازدهم',tasks:[false,false,false],messages:[],page:'home'};
+// DEMO ONLY: these profiles are browser-local, not authenticated server accounts.
+const activeKey='aimadrese-demo-active-v2';
+const profilesKey='aimadrese-demo-profiles-v2';
+let profiles={};try{profiles=JSON.parse(localStorage.getItem(profilesKey)||'{}')||{}}catch{}
+let activeId=localStorage.getItem(activeKey)||'';
+let isRegistered=!!(activeId&&profiles[activeId]);
+let s=isRegistered?{...defaultState,...profiles[activeId]}:{...defaultState};
+const save=()=>{if(isRegistered&&activeId){profiles[activeId]={...s};localStorage.setItem(profilesKey,JSON.stringify(profiles))}};
+const profileId=(name,lastName,grade,code)=>JSON.stringify([name.trim().toLocaleLowerCase('fa'),lastName.trim().toLocaleLowerCase('fa'),grade,code.trim()]);
+
 const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const grades=['سوم','چهارم','پنجم','ششم','هفتم','هشتم','نهم','دهم','یازدهم','دوازدهم'];
-function render(){save();document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===s.page));composer.classList.toggle('hidden',s.page!=='assistant');
-if(s.page==='home')screen.innerHTML=`<div class="hero"><h2>سلام ${esc(s.name)} جان! 👋</h2><p>هر روز یک قدم به یادگیری بهتر نزدیک‌تر شو.</p><button class="btn" style="background:white;color:#087df4" data-page="assistant">شروع گفتگو با دستیار</button></div><h3>مسیر یادگیری تو</h3><div class="grid"><div class="card"><h3>🎯 کارهای امروز</h3><p>${s.tasks.filter(Boolean).length} از ۳ انجام شده</p></div><div class="card"><h3>📚 پایه تحصیلی</h3><p>${esc(s.grade)}</p></div></div><div class="card"><h3>📐 کمک در ریاضی</h3><p>سؤالت رو بپرس و قدم‌به‌قدم یاد بگیر.</p><button class="btn" data-ask="معادله درجه دوم را توضیح بده">شروع یادگیری</button></div><div class="card"><h3>📅 برنامه امروز</h3><button class="btn ghost" data-page="plan">مشاهده برنامه</button></div>`;
+const grades=['اول','دوم','سوم','چهارم','پنجم','ششم','هفتم','هشتم','نهم','دهم','یازدهم','دوازدهم'];
+function showSignup(){
+  composer.classList.add('hidden');$('#nav').classList.add('hidden');
+  screen.innerHTML=`<section class="guest-welcome"><img src="/aimadrese-logo.png" alt="ای‌آی مدرسه"><h1>به ای‌آی مدرسه خوش اومدی!</h1><p>نام و پایه‌ات رو وارد کن و یک کد دلخواه بنویس؛ ورود آزمایشی فوری است.</p><form id="guest-signup"><label for="guest-first">نام</label><input id="guest-first" required maxlength="35" autocomplete="given-name" placeholder="نام شما"><label for="guest-last">نام خانوادگی</label><input id="guest-last" required maxlength="45" autocomplete="family-name" placeholder="نام خانوادگی"><label for="guest-grade">پایه تحصیلی</label><select id="guest-grade" required><option value="">انتخاب پایه</option>${grades.map(g=>`<option value="${g}">${g}</option>`).join('')}</select><label for="guest-code">کد ورود دلخواه</label><input id="guest-code" required minlength="1" maxlength="40" autocomplete="off" placeholder="مثلاً 1234"><button type="submit">ورود به پنل شخصی ←</button></form><small>حالت آزمایشی: هر کدی پذیرفته می‌شود. برای بازکردن پنل قبلی در همین مرورگر، همان نام، پایه و کد را وارد کن. این ورود امن نیست و بین دستگاه‌ها همگام نمی‌شود.</small></section>`;
+}
+function render(){if(!isRegistered){showSignup();return}$('#nav').classList.remove('hidden');save();document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===s.page));composer.classList.toggle('hidden',s.page!=='assistant');
+if(s.page==='home')screen.innerHTML=`
+<div class="dashboard-home">
+  <section class="dashboard-banner">
+    <h1>اولین پلتفرم<br>مدرسه هوشمند</h1>
+    <p>سلام ${esc(s.name)} ${esc(s.lastName||'')}! آماده‌ای امروز یه چیز جدید یاد بگیری؟</p>
+    <button class="dashboard-cta" data-page="assistant">شروع با دستیار هوشمند ✨</button>
+  </section>
+  <section class="dashboard-panel">
+    <div class="dashboard-stats">
+      <div class="dashboard-stat"><strong>—</strong><span>دقیقه مطالعه</span></div>
+      <div class="dashboard-stat"><strong>${s.tasks.filter(Boolean).length}</strong><span>فعالیت انجام‌شده</span></div>
+      <div class="dashboard-stat"><strong>—</strong><span>سؤال حل‌شده</span></div>
+    </div>
+    <p class="dashboard-focus">تمرکز امروز: <b>ریاضی ـ پایه ${esc(s.grade)}</b></p>
+  </section>
+  <section class="dashboard-suggest">
+    <div class="dashboard-robot" aria-hidden="true">🤖</div>
+    <div><h3>پیشنهاد امروز:</h3><p>تابع رو هنوز کامل نگرفتی؟ می‌خوای از تابع شروع کنیم یا یه سؤال حل کنیم؟</p><button class="btn" data-ask="مفهوم تابع را متناسب با پایه تحصیلی من ساده و با مثال توضیح بده">شروع کنید</button></div>
+  </section>
+  <div class="dashboard-shortcuts">
+    <button class="dashboard-shortcut" data-page="profile"><span>📊</span>گزارش من</button>
+    <button class="dashboard-shortcut" data-page="plan"><span>🗓️</span>برنامه‌ریزی</button>
+    <button class="dashboard-shortcut" data-ask="از من یک آزمون کوتاه متناسب با پایه تحصیلی‌ام بگیر"><span>📋</span>آزمون کوتاه</button>
+  </div>
+  <section class="dashboard-panel">
+    <h3 class="dashboard-section-heading">پیشرفت این هفته</h3>
+    <div class="dashboard-legend"><span><i style="background:#1687f2"></i>ساعت مطالعه</span><span><i style="background:#72c33b"></i>دقت آزمون</span><span><i style="background:#ff8a17"></i>تمرکز</span></div>
+    <svg class="dashboard-chart" viewBox="0 0 390 195" role="img" aria-label="نمودار نمایشی پیشرفت هفتگی؛ هنوز داده واقعی ثبت نشده است">
+      <g stroke="#e8eef5" stroke-width="1"><path d="M25 20H377 M25 55H377 M25 90H377 M25 125H377 M25 160H377"/></g>
+      <g font-size="10" fill="#91a1b1" text-anchor="middle"><text x="45" y="181">شنبه</text><text x="99" y="181">یکشنبه</text><text x="153" y="181">دوشنبه</text><text x="207" y="181">سه‌شنبه</text><text x="261" y="181">چهارشنبه</text><text x="315" y="181">پنجشنبه</text><text x="365" y="181">جمعه</text></g>
+      <path d="M45 73 Q72 44 99 83 T153 106 T207 118 T261 92 T315 81 T365 68" fill="none" stroke="#1687f2" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M45 133 Q72 113 99 138 T153 122 T207 72 T261 108 T315 125 T365 113" fill="none" stroke="#72c33b" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M45 118 Q72 105 99 127 T153 111 T207 103 T261 65 T315 96 T365 94" fill="none" stroke="#ff8a17" stroke-width="3.5" stroke-linecap="round"/>
+      <g fill="#fff" stroke-width="3"><circle cx="45" cy="73" r="4" stroke="#1687f2"/><circle cx="99" cy="83" r="4" stroke="#1687f2"/><circle cx="153" cy="106" r="4" stroke="#1687f2"/><circle cx="207" cy="118" r="4" stroke="#1687f2"/><circle cx="261" cy="92" r="4" stroke="#1687f2"/><circle cx="315" cy="81" r="4" stroke="#1687f2"/><circle cx="365" cy="68" r="4" stroke="#1687f2"/></g>
+    </svg>
+    <p class="dashboard-chart-note">نمودار نمونه است؛ اتصال آمار واقعی در مرحله بعد انجام می‌شود.</p>
+    <div class="dashboard-pills"><div class="dashboard-pill">📘 مطالعه: —</div><div class="dashboard-pill">◉ دقت: —</div><div class="dashboard-pill">⬆ روند: —</div></div>
+  </section>
+</div>`;
 if(s.page==='plan')screen.innerHTML=`<h2>برنامه امروز 📅</h2><p class="muted">کارهای انجام‌شده رو علامت بزن.</p>${['مرور درس — ۲۵ دقیقه','حل تمرین — ۳۰ دقیقه','مرور نکات — ۱۵ دقیقه'].map((x,i)=>`<div class="card"><label><input type="checkbox" data-task="${i}" ${s.tasks[i]?'checked':''}> ${x}</label></div>`).join('')}<div class="card"><h3>پیشرفت امروز</h3><div class="bar"><div style="width:${s.tasks.filter(Boolean).length/3*100}%"></div></div><p>${s.tasks.filter(Boolean).length} از ۳ فعالیت</p></div>`;
 if(s.page==='assistant'){screen.innerHTML=s.messages.length?s.messages.map((m,i)=>`<div class="msg-wrap ${m.role==='user'?'user-wrap':''}"><div class="message ${m.role}">${m.role==='assistant'?formatAnswer(m.text):esc(m.text).replace(/\n/g,'<br>')}${m.mediaLabel?`<div class="msg-media">${esc(m.mediaLabel)}</div>`:''}</div>${m.role==='assistant'&&!m.pending?`<div class="msg-actions"><button class="copy-btn" data-copy="${i}" aria-label="کپی پاسخ">📋 کپی پاسخ</button></div>`:''}</div>`).join(''):`<div class="center"><div class="robot">🤖</div><h2>سلام ${esc(s.name)} جان!</h2><p class="muted">من دستیار آموزشی ای‌آی مدرسه هستم.<br>می‌تونی سؤال رو بنویسی، عکس بفرستی یا ویس ضبط کنی.</p></div><div class="chips"><button data-ask="معادله درجه دوم را توضیح بده">📐 ریاضی</button><button data-ask="برای امتحان برنامه بده">📅 برنامه امتحان</button><button data-ask="از من آزمون بگیر">✏️ آزمون</button><button data-ask="زبان انگلیسی تمرین کنیم">🇬🇧 زبان</button></div>`;screen.scrollTop=screen.scrollHeight}
 if(s.page==='courses')screen.innerHTML=`<h2>دوره‌های آموزشی 📚</h2><div class="card"><h3>ریاضی ${esc(s.grade)}</h3><p>پیش‌نمایش مفاهیم و حل تمرین</p><button class="btn" data-ask="معادله درجه دوم را توضیح بده">پیش‌نمایش</button></div><div class="card"><h3>زبان انگلیسی</h3><p>تمرین لغت و گرامر</p><button class="btn" data-ask="زبان انگلیسی تمرین کنیم">شروع تمرین</button></div><div class="notice">دوره‌ها فعلاً نمونه هستند و خرید واقعی ندارند.</div>`;
-if(s.page==='profile')screen.innerHTML=`<h2>پروفایل من 👤</h2><div class="card"><label>نام نمایشی</label><input class="field" id="name" maxlength="40" value="${esc(s.name)}"><label>پایه تحصیلی</label><select class="field" id="grade">${grades.map(g=>`<option ${g===s.grade?'selected':''}>${g}</option>`).join('')}</select><button class="btn" id="save-profile">ذخیره تغییرات</button></div><div class="card"><h3>🔒 حریم خصوصی</h3><p>نام، پایه و برنامه در همین مرورگر ذخیره می‌شود. برای تست از اطلاعات واقعی حساس استفاده نکن.</p></div><button class="btn ghost" id="reset">پاک کردن داده‌های آزمایشی</button>`}
+if(s.page==='profile')screen.innerHTML=`<h2>پروفایل من 👤</h2><div class="card"><label>نام</label><input class="field" id="name" maxlength="40" value="${esc(s.name)}"><label>نام خانوادگی</label><input class="field" id="lastName" maxlength="45" value="${esc(s.lastName||'')}"><label>پایه تحصیلی</label><select class="field" id="grade">${grades.map(g=>`<option ${g===s.grade?'selected':''}>${g}</option>`).join('')}</select><button class="btn" id="save-profile">ذخیره تغییرات</button></div><div class="card"><h3>🔒 حریم خصوصی</h3><p>این نسخه آزمایشی است؛ هر کدی پذیرفته می‌شود و هیچ احراز هویت واقعی وجود ندارد. اطلاعات فقط در همین مرورگر نگهداری می‌شود. اطلاعات حساس وارد نکن.</p></div><button class="btn ghost" id="logout-guest">خروج و ورود با مشخصات دیگر</button>`}
 // تبدیل Markdown و LaTeX به نمایش امن و خوانا
 function formatAnswer(raw){
   const source=String(raw||'');
@@ -75,6 +160,7 @@ async function ask(q){
   }catch(err){s.messages[pendingIndex].text='⚠️ '+(err.message||'ارتباط برقرار نشد');}
   s.messages[pendingIndex].pending=false;busy=false;$('#send').disabled=false;render();
 }
-document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.page){s.page=b.dataset.page;render()}else if(b.dataset.ask)ask(b.dataset.ask);else if(b.id==='send')ask();else if(b.id==='pick-image')$('#image-file').click();else if(b.id==='remove-attachment'){attachment=null;updateAttachment()}else if(b.dataset.copy!==undefined){const msg=s.messages[Number(b.dataset.copy)];if(msg){navigator.clipboard.writeText(msg.text).then(()=>{b.textContent='✓ کپی شد';setTimeout(()=>b.textContent='📋 کپی پاسخ',1500)}).catch(()=>alert('کپی در این مرورگر امکان‌پذیر نیست.'))}}else if(b.id==='save-profile'){s.name=$('#name').value.trim()||'دانش‌آموز';s.grade=$('#grade').value;render()}else if(b.id==='reset'){if(confirm('داده‌های آزمایشی پاک شوند؟')){localStorage.removeItem('aimadrese-demo');s={...defaultState,tasks:[false,false,false],messages:[]};render()}}});
-document.addEventListener('change',e=>{if(e.target.dataset.task!==undefined){s.tasks[+e.target.dataset.task]=e.target.checked;render()}});input.addEventListener('keydown',e=>{if(e.key==='Enter')ask()});render()})();
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.page){s.page=b.dataset.page;render()}else if(b.dataset.ask)ask(b.dataset.ask);else if(b.id==='send')ask();else if(b.id==='pick-image')$('#image-file').click();else if(b.id==='remove-attachment'){attachment=null;updateAttachment()}else if(b.dataset.copy!==undefined){const msg=s.messages[Number(b.dataset.copy)];if(msg){navigator.clipboard.writeText(msg.text).then(()=>{b.textContent='✓ کپی شد';setTimeout(()=>b.textContent='📋 کپی پاسخ',1500)}).catch(()=>alert('کپی در این مرورگر امکان‌پذیر نیست.'))}}else if(b.id==='save-profile'){s.name=$('#name').value.trim()||'دانش‌آموز';s.lastName=$('#lastName').value.trim();s.grade=$('#grade').value;save();render()}else if(b.id==='logout-guest'){if(confirm('از پنل خارج شوی؟ اطلاعات این پنل در همین مرورگر باقی می‌ماند.')){save();localStorage.removeItem(activeKey);activeId='';isRegistered=false;s={...defaultState};render()}}else if(b.id==='reset'){if(confirm('فقط اطلاعات همین پنل از این مرورگر پاک شود؟')){delete profiles[activeId];localStorage.setItem(profilesKey,JSON.stringify(profiles));localStorage.removeItem(activeKey);activeId='';isRegistered=false;s={...defaultState};render()}}});
+document.addEventListener('submit',e=>{if(e.target.id!=='guest-signup')return;e.preventDefault();const name=$('#guest-first').value.trim(),lastName=$('#guest-last').value.trim(),grade=$('#guest-grade').value,code=$('#guest-code').value.trim();if(!name||!lastName||!grade||!code)return;activeId=profileId(name,lastName,grade,code);s=profiles[activeId]?{...defaultState,...profiles[activeId]}:{...defaultState,name,lastName,grade,tasks:[false,false,false],messages:[],page:'home'};s.page='home';isRegistered=true;localStorage.setItem(activeKey,activeId);render()});
+document.addEventListener('change',e=>{if(e.target.dataset.task!==undefined){s.tasks[+e.target.dataset.task]=e.target.checked;render()}});input.addEventListener('keydown',e=>{if(e.key==='Enter'&&isRegistered)ask()});render()})();
 </script></body></html>
