@@ -2,7 +2,6 @@
   "name": "aimadrese",
   "compatibility_date": "2026-11-16",
   "assets": {
-    "directory": "./public",
-    "binding": "ASSETS"
+    "directory": "./public"
   }
 }
