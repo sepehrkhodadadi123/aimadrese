@@ -538,7 +538,7 @@ const socMe=()=>authSession?.user?.id;
 const socAvatar=(p)=>p?.avatar_url?`<img src="${socSafe(p.avatar_url)}" class="soc-avatar" alt="">`:`<span class="soc-initial">${socSafe((p?.display_name||'ک').slice(0,1))}</span>`;
 function socPhoto(p){return p?.media_path?SB_URL+'/storage/v1/object/public/aimadrese-social/'+p.media_path:null}
 function socUser(id){return socProfiles.find(p=>p.id===id)||{id,display_name:'کاربر ای‌آی مدرسه'}}
-async function socFetch(){if(!authSession)return;const a=await ensureSession();if(!a)return;try{const [posts,stories,profiles,follows]=await Promise.all([
+async function socFetch(){if(!authSession)return;try{const a=await ensureSession();if(!a)throw Error('نشست کاربر پیدا نشد');const [posts,stories,profiles,follows]=await Promise.all([
  sbRequest('/rest/v1/social_posts?select=*&order=created_at.desc&limit=100',{token:a.access_token}),
  sbRequest('/rest/v1/social_stories?select=*&expires_at=gt.'+encodeURIComponent(new Date().toISOString())+'&order=created_at.desc&limit=50',{token:a.access_token}),
  sbRequest('/rest/v1/app_profiles?select=id,display_name,avatar_url,role,bio,subject,grade&limit=500',{token:a.access_token}),
@@ -548,7 +548,7 @@ async function socFetch(){if(!authSession)return;const a=await ensureSession();i
 function socGo(view,id){socView=view;socCurrent=id||null;s.page='explore';appRender();if(view==='feed'||view==='profile'||view==='post'||view==='reel'||view==='story')socFetch();if(view==='post')socFetchComments(id)}
 async function socFetchComments(id){try{const a=await ensureSession();socComments=await sbRequest('/rest/v1/social_comments?select=*&post_id=eq.'+encodeURIComponent(id)+'&order=created_at.asc&limit=150',{token:a.access_token});if(socView==='post'&&socCurrent===id)appRender()}catch(e){socError=e.message;appRender()}}
 function socHeader(label){return `<div class="soc-line"><button class="soc-back" data-soc-go="feed">← بازگشت</button><h2>${socSafe(label)}</h2></div>`}
-function socPostTile(p){const media=socPhoto(p),isVideo=p.media_type==='video';return `<button class="soc-tile" data-soc-open="${p.id}">${media?(isVideo?`<video src="${socSafe(media)}#t=0.2" preload="metadata" muted playsinline></video>`:`<img loading="lazy" src="${socSafe(media)}" alt="">`):''}<span class="soc-shade"></span><i>${isVideo?'▣':'▧'}</i><b>${socSafe(p.caption?.slice(0,55)||'محتوای آموزشی')}</b><small>${socSafe(p.subject||'آموزشی')}</small></button>`}
+function socPostTile(p){const media=socPhoto(p),isVideo=p.media_type==='video';return `<button class="soc-tile" data-soc-open="${p.id}">${media?(isVideo?`<span class="soc-video-placeholder">▶</span>`:`<img loading="lazy" src="${socSafe(media)}" alt="">`):''}<span class="soc-shade"></span><i>${isVideo?'▣':'▧'}</i><b>${socSafe(p.caption?.slice(0,55)||'محتوای آموزشی')}</b><small>${socSafe(p.subject||'آموزشی')}</small></button>`}
 function socFeed(){const stories=[...new Map(socStories.map(x=>[x.user_id,x])).values()];const list=socPosts.filter(p=>(socTag==='همه'||p.subject===socTag)&&(!socQuery||[p.caption,p.subject,socUser(p.user_id).display_name].join(' ').toLowerCase().includes(socQuery.toLowerCase())));return `<div class="soc"><div class="soc-head"><h2>اکسپلور ✨</h2><div><button class="soc-icon" data-soc-go="profile" data-soc-id="${socMe()}">پروفایل من</button> <button class="soc-icon" data-soc-go="create">＋</button></div></div><div class="soc-stories"><button class="soc-story" data-soc-go="profile" data-soc-id="${socMe()}">${socAvatar(appProfile)}پروفایل من</button><button class="soc-story" data-soc-type="story" data-soc-go="create"><span class="soc-initial">＋</span>داستان جدید</button>${stories.map(st=>`<button class="soc-story" data-soc-go="story" data-soc-id="${st.id}">${socAvatar(socUser(st.user_id))}${socSafe(socUser(st.user_id).display_name?.slice(0,11))}</button>`).join('')}</div><input class="soc-search" id="soc-search" placeholder="جست‌وجوی معلم، درس و محتوا..." value="${socSafe(socQuery)}"><div class="soc-tags">${['همه','ریاضی','علوم','فیزیک','زبان','فارسی','مشاوره'].map(t=>`<button class="soc-tag ${socTag===t?'on':''}" data-soc-tag="${t}">${t}</button>`).join('')}</div>${socError?`<div class="notice">${socSafe(socError)}</div>`:''}<div class="soc-grid">${list.map(socPostTile).join('')}</div>${!list.length?'<div class="soc-empty">هنوز محتوایی منتشر نشده؛ اولین پست آموزشی رو بساز!</div>':''}<button class="soc-fab" data-soc-go="create" aria-label="ایجاد محتوا">＋</button></div>`}
 function socProfile(id){const owner=socUser(id||socMe()),own=owner.id===socMe(),posts=socPosts.filter(p=>p.user_id===owner.id),followers=socProfiles.length?null:null;return `<div class="soc">${socHeader(own?'پروفایل اجتماعی من':'پروفایل کاربر')}<div class="soc-card"><div class="soc-profile-head">${socAvatar(owner)}<div><h3>${socSafe(owner.display_name||'کاربر')}</h3><div class="soc-muted">${owner.role==='teacher'?'معلم':'دانش‌آموز'} · ${socSafe(owner.subject||owner.grade||'ای‌آی مدرسه')}</div></div></div><p>${socSafe(owner.bio||'به ای‌آی مدرسه خوش آمدید!')}</p><div class="soc-line"><b>${posts.length} پست</b><span class="soc-muted">${own?'پروفایل خودت': 'پروفایل عمومی'}</span></div><div class="soc-actions">${own?`<button data-soc-go="create">＋ انتشار محتوا</button>`:`<button class="soc-primary" data-soc-follow="${owner.id}">${socFollowing.includes(owner.id)?'دنبال می‌کنید ✓':'دنبال کردن ＋'}</button><button data-soc-message="${owner.id}">پیام خصوصی</button>`}</div></div><h3>پست‌ها و ریلزها</h3><div class="soc-grid">${posts.map(socPostTile).join('')}</div>${!posts.length?'<div class="soc-empty">هنوز پستی منتشر نشده است.</div>':''}</div>`}
 function socDetail(p){if(!p)return `<div class="soc">${socHeader('محتوا')}<p>پست پیدا نشد.</p></div>`;const user=socUser(p.user_id),media=socPhoto(p),own=p.user_id===socMe();return `<div class="soc">${socHeader(p.media_type==='video'?'ریلز آموزشی':'پست آموزشی')}<div class="soc-card"><div class="soc-line"><button class="soc-icon" data-soc-go="profile" data-soc-id="${p.user_id}">${socSafe(user.display_name)}</button><span class="soc-muted">${socDate(p.created_at)}</span></div>${media?(p.media_type==='video'?`<video class="soc-video" src="${socSafe(media)}" controls playsinline preload="metadata"></video>`:`<img class="soc-photo" src="${socSafe(media)}" alt="تصویر پست">`):''}<p>${socSafe(p.caption)}</p><span class="soc-muted">${socSafe(p.subject||'آموزشی')}</span><div class="soc-actions"><button data-soc-like="${p.id}">♡ پسندیدن</button><button data-soc-save="${p.id}">▢ ذخیره</button><button data-soc-share="${p.id}">↗ اشتراک‌گذاری</button><button data-soc-report="${p.id}">گزارش</button>${own?`<button data-soc-delete="${p.id}">حذف پست</button>`:''}</div><h3>نظرات</h3>${socComments.map(c=>`<div class="soc-comment"><b>${socSafe(socUser(c.user_id).display_name)}:</b> ${socSafe(c.body)}</div>`).join('')}<form id="soc-comment-form" data-post="${p.id}"><input class="soc-input" name="body" maxlength="500" required placeholder="نظر آموزشی خود را بنویسید"><button class="btn" type="submit">ارسال نظر</button></form></div></div>`}
@@ -561,5 +561,33 @@ document.addEventListener('click',async e=>{const b=e.target.closest('button[dat
 document.addEventListener('input',e=>{if(e.target.id==='soc-search'){socQuery=e.target.value;const grid=document.querySelector('.soc-grid');if(grid){const list=socPosts.filter(p=>(socTag==='همه'||p.subject===socTag)&&[p.caption,p.subject,socUser(p.user_id).display_name].join(' ').toLowerCase().includes(socQuery.toLowerCase()));grid.innerHTML=list.map(socPostTile).join('')}}},true);
 document.addEventListener('submit',async e=>{if(!['soc-create-form','soc-comment-form'].includes(e.target.id))return;e.preventDefault();e.stopImmediatePropagation();const form=e.target;try{if(form.id==='soc-comment-form'){const body=form.elements.body.value.trim();if(!body)return;await socMutate('social_comments','POST',{post_id:form.dataset.post,user_id:socMe(),body});form.reset();await socFetchComments(form.dataset.post);return}if(socBusy)return;socBusy=true;const kind=form.elements.kind.value,file=form.elements.media.files[0],caption=form.elements.caption.value.trim(),subject=form.elements.subject.value;const uploaded=await socUpload(file);if(kind==='reel'&&uploaded.media_type!=='video')throw Error('ریلز باید ویدئو باشد');if(kind==='story')await socMutate('social_stories','POST',{user_id:socMe(),caption,media_path:uploaded.path,media_type:uploaded.media_type});else await socMutate('social_posts','POST',{user_id:socMe(),caption,subject,media_path:uploaded.path,media_type:uploaded.media_type,kind});socView='feed';await socFetch();alert('محتوا منتشر شد')}catch(err){alert('خطا در انتشار: '+err.message)}finally{socBusy=false}},true);
 // Refresh social feed on first opening and on later visits, without changing the teacher dashboard.
-document.addEventListener('click',e=>{const b=e.target.closest('[data-page="explore"]');if(b){socView='feed';if(Date.now()-socLastLoaded>15000)setTimeout(socFetch,150)}},true);
+// V20.1: handle Explore navigation before legacy tab handlers and render immediately.
+let socFetchInFlight=false;
+async function socSafeFetch(){
+ if(socFetchInFlight)return;
+ socFetchInFlight=true;
+ try{await Promise.race([socFetch(),new Promise((_,reject)=>setTimeout(()=>reject(new Error('زمان دریافت اطلاعات تمام شد')),12000))]);}
+ catch(err){socError='اتصال اکسپلور برقرار نشد. دوباره تلاش کنید.';if(s.page==='explore')socSafeRender();}
+ finally{socFetchInFlight=false;}
+}
+function socSafeRender(){
+ try{appRender();}
+ catch(err){
+  console.error('Explore render error:',err);
+  const target=document.querySelector('#screen');
+  if(target)target.innerHTML='<section class="soc" dir="rtl"><h2>اکسپلور</h2><p class="notice">در نمایش محتوا مشکلی پیش آمد. دوباره تلاش کنید.</p><button class="btn" id="soc-retry">تلاش مجدد</button></section>';
+ }
+}
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-page="explore"]');
+ if(!b)return;
+ e.preventDefault();e.stopImmediatePropagation();
+ socView='feed';s.page='explore';socError='';
+ socSafeRender();
+ if(Date.now()-socLastLoaded>15000) setTimeout(socSafeFetch,0);
+},true);
+document.addEventListener('click',e=>{
+ if(e.target.closest('#soc-retry')){e.preventDefault();socSafeRender();socSafeFetch();}
+},true);
+
 </script></body></html>
