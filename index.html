@@ -327,7 +327,8 @@ initApp()})();
 // Voice playback uses the actual audio duration and currentTime; waveform bars are visual.
 const v13WaveHeights=[8,12,9,16,21,13,24,17,11,20,26,14,18,31,20,13,26,18,12,23,30,17,12,20,14,9,15,11];
 function voiceCardMarkup(url,id){
- const safeUrl=appEsc(url),safeId=appEsc(id);
+ const escapeVoiceValue=value=>String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+ const safeUrl=escapeVoiceValue(url),safeId=escapeVoiceValue(id);
  const bars=v13WaveHeights.map((h,i)=>`<span class="v13-bar" style="height:${h}px" data-bar="${i}"></span>`).join('');
  return `<div class="v13-voice" data-voice-id="${safeId}"><button class="v13-play" type="button" aria-label="پخش پیام صوتی" data-v13-play="1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"/></svg></button><div class="v13-middle"><div class="v13-wave" data-v13-seek="1" role="slider" tabindex="0" aria-label="موقعیت پخش ویس" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">${bars}</div><span class="v13-duration">۰:۰۰</span></div><button class="v13-speed" type="button" data-v13-speed="1" aria-label="سرعت پخش">1x</button><audio preload="metadata" src="${safeUrl}"></audio></div>`;
 }
