@@ -561,33 +561,53 @@ document.addEventListener('click',async e=>{const b=e.target.closest('button[dat
 document.addEventListener('input',e=>{if(e.target.id==='soc-search'){socQuery=e.target.value;const grid=document.querySelector('.soc-grid');if(grid){const list=socPosts.filter(p=>(socTag==='همه'||p.subject===socTag)&&[p.caption,p.subject,socUser(p.user_id).display_name].join(' ').toLowerCase().includes(socQuery.toLowerCase()));grid.innerHTML=list.map(socPostTile).join('')}}},true);
 document.addEventListener('submit',async e=>{if(!['soc-create-form','soc-comment-form'].includes(e.target.id))return;e.preventDefault();e.stopImmediatePropagation();const form=e.target;try{if(form.id==='soc-comment-form'){const body=form.elements.body.value.trim();if(!body)return;await socMutate('social_comments','POST',{post_id:form.dataset.post,user_id:socMe(),body});form.reset();await socFetchComments(form.dataset.post);return}if(socBusy)return;socBusy=true;const kind=form.elements.kind.value,file=form.elements.media.files[0],caption=form.elements.caption.value.trim(),subject=form.elements.subject.value;const uploaded=await socUpload(file);if(kind==='reel'&&uploaded.media_type!=='video')throw Error('ریلز باید ویدئو باشد');if(kind==='story')await socMutate('social_stories','POST',{user_id:socMe(),caption,media_path:uploaded.path,media_type:uploaded.media_type});else await socMutate('social_posts','POST',{user_id:socMe(),caption,subject,media_path:uploaded.path,media_type:uploaded.media_type,kind});socView='feed';await socFetch();alert('محتوا منتشر شد')}catch(err){alert('خطا در انتشار: '+err.message)}finally{socBusy=false}},true);
 // Refresh social feed on first opening and on later visits, without changing the teacher dashboard.
-// V20.1: handle Explore navigation before legacy tab handlers and render immediately.
+// V20.2: immediate navigation with an independent first paint.
 let socFetchInFlight=false;
-async function socSafeFetch(){
- if(socFetchInFlight)return;
- socFetchInFlight=true;
- try{await Promise.race([socFetch(),new Promise((_,reject)=>setTimeout(()=>reject(new Error('زمان دریافت اطلاعات تمام شد')),12000))]);}
- catch(err){socError='اتصال اکسپلور برقرار نشد. دوباره تلاش کنید.';if(s.page==='explore')socSafeRender();}
- finally{socFetchInFlight=false;}
-}
 function socSafeRender(){
  try{appRender();}
  catch(err){
-  console.error('Explore render error:',err);
-  const target=document.querySelector('#screen');
-  if(target)target.innerHTML='<section class="soc" dir="rtl"><h2>اکسپلور</h2><p class="notice">در نمایش محتوا مشکلی پیش آمد. دوباره تلاش کنید.</p><button class="btn" id="soc-retry">تلاش مجدد</button></section>';
+  console.error('Explore render failed',err);
+  const target=document.getElementById('screen');
+  if(target)target.innerHTML='<section class="soc" dir="rtl"><h2>اکسپلور</h2><p class="notice">نمایش اکسپلور با مشکل مواجه شد.</p><button class="btn" id="soc-retry">تلاش مجدد</button></section>';
  }
 }
-document.addEventListener('click',e=>{
- const b=e.target.closest('[data-page="explore"]');
+function socFirstPaint(){
+ const target=document.getElementById('screen');
+ if(!target)return;
+ try{
+  target.innerHTML=socFeed();
+ }catch(err){
+  console.error('Explore initial paint failed',err);
+  target.innerHTML='<section class="soc" dir="rtl"><h2>اکسپلور</h2><p class="notice">صفحه باز شد، اما نمایش محتوا با مشکل مواجه شد.</p><button class="btn" id="soc-retry">تلاش مجدد</button></section>';
+ }
+ const composer=document.getElementById('composer');
+ if(composer)composer.classList.add('hidden');
+ const nav=document.getElementById('nav');
+ if(nav){nav.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page==='explore'));}
+}
+async function socSafeFetch(){
+ if(socFetchInFlight)return;
+ socFetchInFlight=true;
+ try{
+  // Fetch does not block navigation. Existing socFetch handles Supabase errors.
+  await Promise.race([socFetch(),new Promise((_,reject)=>setTimeout(()=>reject(Error('timeout')),12000))]);
+ }catch(err){
+  socError='دریافت محتوا طول کشید. دوباره تلاش کنید.';
+  if(s.page==='explore')socFirstPaint();
+ }finally{socFetchInFlight=false;}
+}
+// Capture the nav click before older handlers and never wait for a network request.
+document.addEventListener('click',function(e){
+ const b=e.target.closest?.('button[data-page="explore"]');
  if(!b)return;
  e.preventDefault();e.stopImmediatePropagation();
  socView='feed';s.page='explore';socError='';
- socSafeRender();
- if(Date.now()-socLastLoaded>15000) setTimeout(socSafeFetch,0);
+ socFirstPaint();
+ if(Date.now()-socLastLoaded>15000)queueMicrotask(()=>{socSafeFetch();});
 },true);
-document.addEventListener('click',e=>{
- if(e.target.closest('#soc-retry')){e.preventDefault();socSafeRender();socSafeFetch();}
+document.addEventListener('click',function(e){
+ if(!e.target.closest?.('#soc-retry'))return;
+ e.preventDefault();socFirstPaint();socSafeFetch();
 },true);
 
 </script></body></html>
