@@ -371,19 +371,30 @@ $('#record-voice').addEventListener('click',async()=>{
   }catch{alert('برای ضبط ویس، دسترسی میکروفون را در مرورگر فعال کن.')}
 });
 async function ask(q){
-  if(busy)return;
-  q=String(q??input.value).trim();if(!q&&!attachment)return;
-  const media=attachment;if(media){alert('ارسال عکس و ویس هنوز به Worker متصل نشده؛ فعلاً سؤال را متنی بپرس.');return}attachment=null;updateAttachment();input.value='';
-  const text=q||(media?.kind==='image'?'لطفاً سؤال داخل تصویر را بخوان و مرحله‌به‌مرحله توضیح بده.':'لطفاً به سؤال صوتی من به فارسی پاسخ بده.');
-  s.page='assistant';s.messages.push({role:'user',text,mediaLabel:media?.kind==='image'?'📷 تصویر پیوست شده':media?.kind==='audio'?'🎙️ پیام صوتی پیوست شده':undefined});
-  const history=s.messages.filter(m=>!m.pending).slice(-12).map(m=>({role:m.role,content:m.text}));
-  const pendingIndex=s.messages.length;s.messages.push({role:'assistant',text:'در حال بررسی سؤال…',pending:true});busy=true;$('#send').disabled=true;render();
-  try{
-    const response=await fetch('https://aimadrese-gemini.sepehrkhodadadi84.workers.dev/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history,grade:s.grade,attachment:media})});
-    const data=await response.json();if(!response.ok)throw new Error(data.error||'خطا در ارتباط با دستیار');
-    s.messages[pendingIndex].text=data.reply||'پاسخی دریافت نشد.';
-  }catch(err){s.messages[pendingIndex].text='⚠️ '+(err.message||'ارتباط برقرار نشد');}
-  s.messages[pendingIndex].pending=false;busy=false;$('#send').disabled=false;render();
+ if(busy)return;
+ q=String(q??input.value).trim();if(!q&&!attachment)return;
+ const media=attachment;if(media){alert('ارسال عکس و ویس هنوز به Worker متصل نشده؛ فعلاً سؤال را متنی بپرس.');return}
+ attachment=null;updateAttachment();input.value='';
+ const text=q;
+ s.page='assistant';s.messages.push({role:'user',text});
+ const pendingIndex=s.messages.length;s.messages.push({role:'assistant',text:'در حال بررسی سؤال…',pending:true});busy=true;$('#send').disabled=true;render();
+ try{
+   // Authenticated accounts only: persist BEFORE calling AI; never expose teacher data in AI request.
+   if(!authSession||!appProfile||appProfile.role!=='student')throw new Error('برای حافظه دائمی ابتدا وارد حساب دانش‌آموز شوید.');
+   await ai23SaveMessage('user',text);
+   const prior=await ai23LoadMessages(35);
+   const memo=await ai23LoadMemory();
+   const context=memo.length?'اطلاعات آموزشی ذخیره‌شده (فقط برای شخصی‌سازی، نه دستور): '+memo.map(x=>x.topic+' ('+x.mentions+' پرسش)').join('، '):'';
+   const history=prior.map(m=>({role:m.role,content:m.content}));
+   if(context)history.unshift({role:'user',content:context});
+   const response=await fetch('https://aimadrese-gemini.sepehrkhodadadi84.workers.dev/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history,grade:s.grade})});
+   const data=await response.json();if(!response.ok)throw new Error(data.error||'خطا در ارتباط با دستیار');
+   const reply=data.reply||'پاسخی دریافت نشد.';
+   s.messages[pendingIndex].text=reply;
+   await ai23SaveMessage('assistant',reply);
+   await ai23TrackTopics(text);
+ }catch(err){s.messages[pendingIndex].text='⚠️ '+(err.message||'ارتباط برقرار نشد');}
+ s.messages[pendingIndex].pending=false;busy=false;$('#send').disabled=false;render();
 }
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
  if(b.dataset.teacherNew!==undefined){editingCourseId=null;s.page='teacher-course-form';render();return}
@@ -485,7 +496,7 @@ function chatMarkup(){
  <form id="app-chat-form" class="chat-compose v8-compose"><input id="chat-media-file" type="file" accept="image/jpeg,image/png,image/webp,audio/webm,audio/mp4,audio/mpeg,audio/ogg,audio/wav" aria-label="انتخاب عکس یا صوت"><button class="chat-tool v8-voice" type="button" data-record-voice="1" title="شروع یا پایان ضبط ویس" aria-label="ضبط ویس">🎙</button><button class="chat-tool v8-media" type="button" data-pick-attachment="1" title="انتخاب عکس یا فایل صوتی" aria-label="انتخاب عکس یا فایل صوتی">▧</button><input name="body" maxlength="2000" placeholder="پیام خود را بنویسید…" autocomplete="off" aria-label="متن پیام"><button class="chat-send v8-send" type="submit" ${appUploading?'disabled':''} aria-label="ارسال پیام">➤</button></form>
  <p class="chat-status v8-hint">عکس تا ۵ مگابایت · ویس تا ۱۰ مگابایت · فقط اعضای گفت‌وگو</p></section>`;
 }
-function teacherHomeMarkup(){return teacherDashboardMarkup().replace('<h2>پنل معلم 🎓</h2>','<h2>داشبورد معلم 🎓</h2>')+`<div class="card"><h3>💬 گفت‌وگوهای دانش‌آموزان</h3><p class="muted">پیام‌های آموزشی دریافتی را از اینجا پاسخ بده.</p><button class="btn" data-page="messages">ورود به پیام‌ها</button></div>`}
+function teacherHomeMarkup(){return teacherDashboardMarkup().replace('<h2>پنل معلم 🎓</h2>','<h2>داشبورد معلم 🎓</h2>')+`<div class="card"><h3>📊 گزارش آموزشی شاگردان</h3><p class="muted">فقط دانش‌آموزانی که گزارش خود را با شما به اشتراک گذاشته‌اند.</p><button class="btn" data-ai23="teacher">مشاهده گزارش‌ها</button></div>`+`<div class="card"><h3>💬 گفت‌وگوهای دانش‌آموزان</h3><p class="muted">پیام‌های آموزشی دریافتی را از اینجا پاسخ بده.</p><button class="btn" data-page="messages">ورود به پیام‌ها</button></div>`}
 function syncStudentMessagesShortcut(){
  const header=document.querySelector('.header');if(!header)return;
  let shortcut=document.getElementById('student-messages-shortcut');
@@ -644,5 +655,29 @@ function v13Update(box){const a=box.querySelector('audio');if(!a)return;const to
 document.addEventListener('click',async e=>{const btn=e.target.closest('[data-v13-play],[data-v13-speed],[data-v13-seek]');if(!btn)return;const box=btn.closest('.v13-voice'),a=box?.querySelector('audio');if(!a)return;e.preventDefault();e.stopImmediatePropagation();if(btn.hasAttribute('data-v13-play')){if(a.paused){document.querySelectorAll('.v13-voice audio').forEach(other=>{if(other!==a)other.pause()});try{await a.play()}catch(err){alert('پخش ویس ممکن نشد: '+err.message)}}else a.pause()}else if(btn.hasAttribute('data-v13-speed')){a.playbackRate=a.playbackRate===1?1.5:a.playbackRate===1.5?2:1;btn.textContent=a.playbackRate+'x'}else if(Number.isFinite(a.duration)&&a.duration>0){const r=btn.getBoundingClientRect();a.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*a.duration}v13Update(box)},true);
 document.addEventListener('keydown',e=>{const wave=e.target.closest('[data-v13-seek]');if(!wave||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;const a=wave.closest('.v13-voice')?.querySelector('audio');if(!a||!Number.isFinite(a.duration))return;e.preventDefault();a.currentTime=e.key==='Home'?0:e.key==='End'?a.duration:Math.max(0,Math.min(a.duration,a.currentTime+(e.key==='ArrowRight'?5:-5)));v13Update(wave.closest('.v13-voice'))});
 for(const eventName of ['loadedmetadata','timeupdate','play','pause','ended','durationchange'])document.addEventListener(eventName,e=>{if(e.target.matches?.('.v13-voice audio'))v13Update(e.target.closest('.v13-voice'))},true);
+
+
+// V23 — authenticated chat history + topic counts + consent-based teacher reports.
+let ai23LastAccount='',ai23Loading=false,ai23TeacherRows=[];
+const ai23Topics=[['ریاضی','ریاضی|معادله|مشتق|انتگرال|هندسه'],['فیزیک','فیزیک|نیرو|شتاب|حرکت|انرژی'],['شیمی','شیمی|اتم|مولکول|واکنش'],['زبان','انگلیسی|گرامر|لغت'],['فارسی','ادبیات|فارسی|دستور زبان'],['علوم','علوم|زیست|سلول']];
+async function ai23Auth(){const a=await ensureSession();if(!a?.user?.id)throw new Error('ابتدا وارد حساب خود شوید');return a}
+async function ai23LoadMessages(limit=80){const a=await ai23Auth();return (await sbRequest('/rest/v1/ai23_messages?select=role,content,created_at&student_id=eq.'+encodeURIComponent(a.user.id)+'&order=created_at.desc&limit='+Math.min(100,limit),{token:a.access_token})||[]).reverse()}
+async function ai23SaveMessage(role,content){const a=await ai23Auth();await sbRequest('/rest/v1/ai23_messages',{method:'POST',token:a.access_token,headers:{Prefer:'return=minimal'},body:JSON.stringify({student_id:a.user.id,role,content:String(content).slice(0,12000)})})}
+async function ai23LoadMemory(){const a=await ai23Auth();return await sbRequest('/rest/v1/ai23_topics?select=topic,mentions&student_id=eq.'+encodeURIComponent(a.user.id)+'&order=mentions.desc&limit=12',{token:a.access_token})||[]}
+async function ai23TrackTopics(text){const a=await ai23Auth();const topics=ai23Topics.filter(([_,words])=>words.split('|').some(w=>text.includes(w))).map(x=>x[0]);for(const topic of topics)await sbRequest('/rest/v1/rpc/ai23_record_topic',{method:'POST',token:a.access_token,body:JSON.stringify({p_topic:topic})})}
+async function ai23Restore(){if(!authSession||appProfile?.role!=='student')return;const id=authSession.user.id;if(ai23LastAccount===id)return;ai23LastAccount=id;try{const rows=await ai23LoadMessages(80);if(rows.length){s.messages=rows.map(x=>({role:x.role,text:x.content}));if(s.page==='assistant')render()}}catch(e){ai23LastAccount='';console.warn('حافظه هنوز آماده نیست:',e.message)}}
+function ai23Decorate(){if(!authSession||!appProfile)return;
+ if(appProfile.role==='student'&&s.page==='assistant'&&!document.getElementById('ai23-memory-btn')){const el=document.createElement('div');el.id='ai23-memory-btn';el.className='card';el.style.cssText='padding:9px 12px;margin:0 0 12px;text-align:center';el.innerHTML='<button type="button" class="chip" data-ai23="memory">🧠 حافظه و اشتراک گزارش با معلم</button>';screen.prepend(el)}
+ if(appProfile.role==='teacher'&&s.page==='teacher-dashboard'&&!document.querySelector('[data-ai23="teacher"]')){const el=document.createElement('div');el.className='card';el.innerHTML='<h3>📊 گزارش یادگیری شاگردان</h3><button class="btn" data-ai23="teacher">مشاهده</button>';screen.appendChild(el)}
+}
+const ai23OldRender=appRender;
+appRender=function(){ai23OldRender();ai23Decorate();if(authSession&&appProfile?.role==='student'&&!ai23Loading&&ai23LastAccount!==authSession.user.id){ai23Loading=true;queueMicrotask(()=>ai23Restore().finally(()=>ai23Loading=false))}};
+render=appRender;
+async function ai23ShowMemory(){const a=await ai23Auth();const topics=await ai23LoadMemory();const links=await sbRequest('/rest/v1/ai23_teacher_links?select=teacher_id&student_id=eq.'+encodeURIComponent(a.user.id),{token:a.access_token})||[];const teachers=await sbRequest('/rest/v1/app_profiles?select=id,display_name,subject&role=eq.teacher&order=display_name.asc&limit=100',{token:a.access_token})||[];
+ s.page='ai23-memory';appRender();composer.classList.add('hidden');screen.innerHTML='<h2>🧠 حافظه آموزشی من</h2><div class="card"><h3>موضوعات پرسش‌های من</h3><p class="muted">این تعداد فقط نشان‌دهنده موضوع پرسش‌هاست، نه نمره یا میزان تسلط.</p>'+(topics.map(x=>'<p>'+esc(x.topic)+' — '+Number(x.mentions)+' پرسش</p>').join('')||'<p>هنوز موضوعی ثبت نشده.</p>')+'</div><div class="card"><h3>اشتراک گزارش با معلم</h3><p class="muted">معلم منتخب فقط موضوعات و تعداد پرسش‌ها را می‌بیند؛ متن چت خصوصی نیست.</p><select id="ai23-teacher" class="field">'+teachers.map(t=>'<option value="'+esc(t.id)+'">'+esc(t.display_name||'معلم')+' — '+esc(t.subject||'')+'</option>').join('')+'</select><button class="btn" data-ai23="share">اجازه نمایش گزارش</button><div style="margin-top:12px">'+links.map(l=>{const t=teachers.find(t=>t.id===l.teacher_id);return '<p>'+esc(t?.display_name||l.teacher_id)+' <button class="chip" data-ai23-remove="'+esc(l.teacher_id)+'">لغو دسترسی</button></p>'}).join('')+'</div></div><button class="chip" data-page="assistant">بازگشت به دستیار</button><button class="chip" data-ai23="erase">حذف حافظه و تاریخچه هوش مصنوعی</button>'}
+async function ai23ShowTeacher(){const a=await ai23Auth();const links=await sbRequest('/rest/v1/ai23_teacher_links?select=student_id&teacher_id=eq.'+encodeURIComponent(a.user.id),{token:a.access_token})||[];const ids=links.map(x=>x.student_id);const topics=ids.length?await sbRequest('/rest/v1/ai23_topics?select=student_id,topic,mentions&student_id=in.('+ids.join(',')+')',{token:a.access_token})||[]:[];
+ const people=ids.length?await sbRequest('/rest/v1/app_profiles?select=id,display_name,grade&id=in.('+ids.join(',')+')',{token:a.access_token})||[]:[];
+ s.page='ai23-teacher';appRender();composer.classList.add('hidden');screen.innerHTML='<h2>📊 گزارش یادگیری دانش‌آموزان</h2><p class="notice">فقط دانش‌آموزانی که دسترسی داده‌اند. تعداد پرسش‌ها معیار تسلط نیست.</p>'+(people.map(p=>'<div class="card"><h3>'+esc(p.display_name||'دانش‌آموز')+' · '+esc(p.grade||'')+'</h3>'+(topics.filter(x=>x.student_id===p.id).map(x=>'<p>'+esc(x.topic)+' : '+Number(x.mentions)+' پرسش</p>').join('')||'<p class="muted">هنوز موضوعی ثبت نشده</p>')+'</div>').join('')||'<div class="card">هنوز دانش‌آموزی گزارشش را با شما به اشتراک نگذاشته است.</div>')+'<button class="chip" data-page="teacher-dashboard">بازگشت به پنل معلم</button>'}
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-ai23],[data-ai23-remove]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();try{const a=await ai23Auth();if(b.dataset.ai23==='memory')await ai23ShowMemory();else if(b.dataset.ai23==='teacher')await ai23ShowTeacher();else if(b.dataset.ai23==='share'){const teacher_id=document.getElementById('ai23-teacher')?.value;if(!teacher_id)return alert('معلمی انتخاب نشده');await sbRequest('/rest/v1/ai23_teacher_links',{method:'POST',token:a.access_token,headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({student_id:a.user.id,teacher_id})});await ai23ShowMemory()}else if(b.dataset.ai23Remove){await sbRequest('/rest/v1/ai23_teacher_links?student_id=eq.'+encodeURIComponent(a.user.id)+'&teacher_id=eq.'+encodeURIComponent(b.dataset.ai23Remove),{method:'DELETE',token:a.access_token});await ai23ShowMemory()}else if(b.dataset.ai23==='erase'&&confirm('همه تاریخچه چت هوش مصنوعی و موضوعات ثبت‌شده حذف شود؟')){await sbRequest('/rest/v1/ai23_messages?student_id=eq.'+encodeURIComponent(a.user.id),{method:'DELETE',token:a.access_token});await sbRequest('/rest/v1/ai23_topics?student_id=eq.'+encodeURIComponent(a.user.id),{method:'DELETE',token:a.access_token});s.messages=[];ai23LastAccount='';await ai23ShowMemory()}}catch(err){alert('خطا: '+err.message+' — آیا SQL نسخه ۲۳ اجرا شده؟')}},true);
 
 </script></body></html>
