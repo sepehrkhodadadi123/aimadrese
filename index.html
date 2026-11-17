@@ -519,7 +519,15 @@ function chatMarkup(){
  <form id="app-chat-form" class="chat-compose v8-compose"><input id="chat-media-file" type="file" accept="image/jpeg,image/png,image/webp,audio/webm,audio/mp4,audio/mpeg,audio/ogg,audio/wav" aria-label="انتخاب عکس یا صوت"><button class="chat-tool v8-voice" type="button" data-record-voice="1" title="شروع یا پایان ضبط ویس" aria-label="ضبط ویس">🎙</button><button class="chat-tool v8-media" type="button" data-pick-attachment="1" title="انتخاب عکس یا فایل صوتی" aria-label="انتخاب عکس یا فایل صوتی">▧</button><input name="body" maxlength="2000" placeholder="پیام خود را بنویسید…" autocomplete="off" aria-label="متن پیام"><button class="chat-send v8-send" type="submit" ${appUploading?'disabled':''} aria-label="ارسال پیام">➤</button></form>
  <p class="chat-status v8-hint">عکس تا ۵ مگابایت · ویس تا ۱۰ مگابایت · فقط اعضای گفت‌وگو</p></section>`;
 }
-function teacherHomeMarkup(){return teacherDashboardMarkup().replace('<h2>پنل معلم 🎓</h2>','<h2>داشبورد معلم 🎓</h2>')+`<div class="card"><h3>📊 گزارش آموزشی شاگردان</h3><p class="muted">فقط دانش‌آموزانی که گزارش خود را با شما به اشتراک گذاشته‌اند.</p><button class="btn" data-ai23="teacher">مشاهده گزارش‌ها</button></div>`+`<div class="card"><h3>💬 گفت‌وگوهای دانش‌آموزان</h3><p class="muted">پیام‌های آموزشی دریافتی را از اینجا پاسخ بده.</p><button class="btn" data-page="messages">ورود به پیام‌ها</button></div>`}
+function teacherHomeMarkup(){
+ // V30.1: The actual teacher landing route must open the redesigned dashboard.
+ // Defer until the current render completes to avoid nested appRender calls.
+ queueMicrotask(()=>{
+  if(s.page==='teacher-dashboard' && appProfile?.role==='teacher'){
+   ai25Open().catch(err=>{console.error('Teacher dashboard loading failed',err);});
+  }
+ });
+return teacherDashboardMarkup().replace('<h2>پنل معلم 🎓</h2>','<h2>داشبورد معلم 🎓</h2>')+`<div class="card"><h3>📊 گزارش آموزشی شاگردان</h3><p class="muted">فقط دانش‌آموزانی که گزارش خود را با شما به اشتراک گذاشته‌اند.</p><button class="btn" data-ai23="teacher">مشاهده گزارش‌ها</button></div>`+`<div class="card"><h3>💬 گفت‌وگوهای دانش‌آموزان</h3><p class="muted">پیام‌های آموزشی دریافتی را از اینجا پاسخ بده.</p><button class="btn" data-page="messages">ورود به پیام‌ها</button></div>`}
 function syncStudentMessagesShortcut(){
  const header=document.querySelector('.header');if(!header)return;
  let shortcut=document.getElementById('student-messages-shortcut');
