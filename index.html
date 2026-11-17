@@ -815,12 +815,12 @@ async function ai27Record(text){
  try{
   const a=await ai23Auth();
   await sbRequest('/rest/v1/ai27_learning_evidence',{method:'POST',token:a.access_token,headers:{Prefer:'return=minimal'},body:JSON.stringify(signals.map(x=>({...x,student_id:a.user.id})))});
- }catch(e){console.warn('AI27 learning evidence was not saved:',e);}
+ }catch(e){console.warn('AI27 learning evidence was not saved:',e);window.ai27LastSaveError=String(e?.message||e);}
 }
 const ai27PriorSave=ai23SaveMessage;
 ai23SaveMessage=async function(role,content){
  const result=await ai27PriorSave(role,content);
- if(role==='user')ai27Record(content).catch(console.warn);
+ if(role==='user')await ai27Record(content);
  return result;
 };
 function ai27Card(){
@@ -860,7 +860,7 @@ async function ai27Refresh(){
   }else ai27Rows=[];
   ai27LoadedAt=new Date().toLocaleTimeString('fa-IR');
   const el=document.getElementById('ai27-card');if(el)el.outerHTML=ai27Card();
- }catch(e){const el=document.querySelector('.ai27-updated');if(el)el.textContent='خطا در دریافت نشانه‌ها؛ SQL نسخه ۲۷ و دسترسی‌ها را بررسی کنید.';console.warn('AI27 teacher fetch',e)}
+ }catch(e){const el=document.querySelector('.ai27-updated');if(el)el.textContent='خطا در دریافت نشانه‌ها: '+String(e?.message||e).slice(0,180);console.warn('AI27 teacher fetch',e)}
  finally{ai27Busy=false}
 }
 function ai27Start(){
@@ -894,7 +894,7 @@ async function ai25Load(){
   }
   ai25Data={people:people||[],topics:topics||[],daily:daily||[]};
   if(ai25Student&&!ai25Data.people.some(x=>x.id===ai25Student))ai25Student='';
-  if(s.page==='ai25-teacher')ai25Page();
+  if(s.page==='ai25-teacher'){ai25Page();ai27Start();}
  }catch(err){
   console.error('AI25 teacher report:',err);
   if(s.page==='ai25-teacher')screen.innerHTML='<div class="ai25 ai25-panel" style="margin:16px;padding:20px;direction:rtl;text-align:right"><h3>گزارش دریافت نشد</h3><p>'+ai25Safe(err?.message||String(err))+'</p><p>اگر خطای جدول یا دسترسی دیدید، SQL نسخه ۲۵ و مجوزهای Supabase را بررسی کنید.</p><button class="btn" data-ai25-retry="1">تلاش دوباره</button></div>';
@@ -913,7 +913,7 @@ async function ai25Open(){
  ai25Timer=setInterval(()=>{if(s.page==='ai25-teacher'&&!ai25Busy)ai25Load()},60000);
 }
 // Intercept only teacher report action; leave other navigation and student app untouched.
-document.addEventListener('click',e=>{const b=e.target.closest('[data-ai23="teacher"],[data-ai25-student],[data-ai25-retry]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();if(b.dataset.ai23==='teacher'||b.hasAttribute('data-ai25-retry')){ai25Open();return}if(b.hasAttribute('data-ai25-student')){ai25Student=b.dataset.ai25Student;ai25Page()}},true);
+document.addEventListener('click',e=>{const b=e.target.closest('[data-ai23="teacher"],[data-ai25-student],[data-ai25-retry]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();if(b.dataset.ai23==='teacher'||b.hasAttribute('data-ai25-retry')){ai25Open();return}if(b.hasAttribute('data-ai25-student')){ai25Student=b.dataset.ai25Student;ai25Page();ai27Refresh()}},true);
 document.addEventListener('change',e=>{if(e.target.id==='ai25-range'){ai25Range=Number(e.target.value)||30;ai25Open()}},true);
 document.addEventListener('input',e=>{if(e.target.id==='ai25-search'){const el=document.getElementById('ai25-people');if(el)el.innerHTML=ai25People(ai25Data?.people||[],e.target.value.trim())}},true);
 const ai25PreviousRender=appRender;appRender=function(){ai25PreviousRender();if(s.page==='ai25-teacher'){if(ai25Data)ai25Page();else{screen.innerHTML='<div class="ai25-loading">در حال بارگذاری گزارش...</div>';composer.classList.add('hidden')}}};render=appRender;
