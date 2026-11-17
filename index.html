@@ -1278,25 +1278,6 @@ document.addEventListener('input',e=>{if(e.target.id==='ai25-search'){const el=d
 const ai25PreviousRender=appRender;appRender=function(){ai25PreviousRender();if(s.page==='ai25-teacher'){if(ai25Data)ai25Page();else{screen.innerHTML='<div class="ai25-loading">در حال بارگذاری گزارش...</div>';composer.classList.add('hidden')}}};render=appRender;
 
 document.addEventListener('click',e=>{const b=e.target.closest('[data-ai30-jump]');if(!b)return;e.preventDefault();const key=b.dataset.ai30Jump;const target={advisor:'ai30-advisor',learning:'ai30-learning',students:'ai30-students',topics:'ai30-topics',reports:'ai30-reports'}[key];if(key==='reports'||key==='topics')document.getElementById('ai30-reports')?.setAttribute('open','');if(key==='top'){window.scrollTo({top:0,behavior:'smooth'});return}document.getElementById(target)?.scrollIntoView({behavior:'smooth',block:'start'})},true);
-initApp()})();
-
-// Voice playback uses the actual audio duration and currentTime; waveform bars are visual.
-const v13WaveHeights=[8,12,9,16,21,13,24,17,11,20,26,14,18,31,20,13,26,18,12,23,30,17,12,20,14,9,15,11];
-function voiceCardMarkup(url,id){
- const escapeVoiceValue=value=>String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
- const safeUrl=escapeVoiceValue(url),safeId=escapeVoiceValue(id);
- const bars=v13WaveHeights.map((h,i)=>`<span class="v13-bar" style="height:${h}px" data-bar="${i}"></span>`).join('');
- return `<div class="v13-voice" data-voice-id="${safeId}"><button class="v13-play" type="button" aria-label="پخش پیام صوتی" data-v13-play="1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"/></svg></button><div class="v13-middle"><div class="v13-wave" data-v13-seek="1" role="slider" tabindex="0" aria-label="موقعیت پخش ویس" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">${bars}</div><span class="v13-duration">۰:۰۰</span></div><button class="v13-speed" type="button" data-v13-speed="1" aria-label="سرعت پخش">1x</button><audio preload="metadata" src="${safeUrl}"></audio></div>`;
-}
-function v13Time(seconds){if(!Number.isFinite(seconds)||seconds<0)return '۰:۰۰';const n=Math.floor(seconds),v=`${Math.floor(n/60)}:${String(n%60).padStart(2,'0')}`;return v.replace(/\d/g,c=>'۰۱۲۳۴۵۶۷۸۹'[Number(c)])}
-function v13Update(box){const a=box.querySelector('audio');if(!a)return;const total=Number.isFinite(a.duration)?a.duration:0;const percent=total?Math.max(0,Math.min(1,a.currentTime/total)):0;box.querySelectorAll('.v13-bar').forEach((bar,i,arr)=>bar.classList.toggle('played',(i+.5)/arr.length<=percent));const time=box.querySelector('.v13-duration');if(time)time.textContent=v13Time(a.paused&&a.currentTime===0?total:a.currentTime)+(a.paused&&a.currentTime===0?'':' / '+v13Time(total));const slider=box.querySelector('.v13-wave');if(slider)slider.setAttribute('aria-valuenow',String(Math.round(percent*100)));const btn=box.querySelector('.v13-play');if(btn){btn.setAttribute('aria-label',a.paused?'پخش پیام صوتی':'توقف پیام صوتی');btn.innerHTML=a.paused?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"/></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>'}}
-document.addEventListener('click',async e=>{const btn=e.target.closest('[data-v13-play],[data-v13-speed],[data-v13-seek]');if(!btn)return;const box=btn.closest('.v13-voice'),a=box?.querySelector('audio');if(!a)return;e.preventDefault();e.stopImmediatePropagation();if(btn.hasAttribute('data-v13-play')){if(a.paused){document.querySelectorAll('.v13-voice audio').forEach(other=>{if(other!==a)other.pause()});try{await a.play()}catch(err){alert('پخش ویس ممکن نشد: '+err.message)}}else a.pause()}else if(btn.hasAttribute('data-v13-speed')){a.playbackRate=a.playbackRate===1?1.5:a.playbackRate===1.5?2:1;btn.textContent=a.playbackRate+'x'}else if(Number.isFinite(a.duration)&&a.duration>0){const r=btn.getBoundingClientRect();a.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*a.duration}v13Update(box)},true);
-document.addEventListener('keydown',e=>{const wave=e.target.closest('[data-v13-seek]');if(!wave||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;const a=wave.closest('.v13-voice')?.querySelector('audio');if(!a||!Number.isFinite(a.duration))return;e.preventDefault();a.currentTime=e.key==='Home'?0:e.key==='End'?a.duration:Math.max(0,Math.min(a.duration,a.currentTime+(e.key==='ArrowRight'?5:-5)));v13Update(wave.closest('.v13-voice'))});
-for(const eventName of ['loadedmetadata','timeupdate','play','pause','ended','durationchange'])document.addEventListener(eventName,e=>{if(e.target.matches?.('.v13-voice audio'))v13Update(e.target.closest('.v13-voice'))},true);
-
-
-
-
 // V36 Exam Studio — real server-backed exams. No answer keys sent to students.
 const ai36={view:'',role:'',exams:[],inbox:[],draft:null,exam:null,studentRows:[],selected:new Set(),attempt:null,answers:{},question:0,error:'',busy:false,report:[],lastSave:'',timer:null,saveTimer:null,loadSeq:0};
 const ai36Safe=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1352,4 +1333,24 @@ document.addEventListener('change',e=>{const t=e.target;if(!ai36Root()||!t)retur
 document.addEventListener('input',e=>{const t=e.target;if(!ai36Root()||!t)return;if(t.dataset.ai36Text!==undefined&&!t.dataset.ai36Json){ai36.answers[t.dataset.ai36Text]=t.value;ai36ScheduleSave()}if(t.dataset.ai36Field){ai36.draft[t.dataset.ai36Field]=t.value}if(t.dataset.ai36Q!==undefined&&t.dataset.key!=='type'){const q=ai36.draft.questions[Number(t.dataset.ai36Q)];q[t.dataset.key]=t.dataset.key==='options'?t.value.split('\n').map(x=>x.trim()).filter(Boolean):t.dataset.key==='points'?Number(t.value):t.value}},true);
 document.addEventListener('visibilitychange',()=>{if(ai36.view==='take'&&ai36.exam?.id&&ai36.exam?.settings?.security!=='standard')ai36Api('student_event',{exam_id:ai36.exam.id,type:document.hidden?'hidden':'visible'}).catch(()=>{})});
 function ai36Mount(){/* Entry is rendered directly in teacher dashboards. */}
+
+initApp()})();
+
+// Voice playback uses the actual audio duration and currentTime; waveform bars are visual.
+const v13WaveHeights=[8,12,9,16,21,13,24,17,11,20,26,14,18,31,20,13,26,18,12,23,30,17,12,20,14,9,15,11];
+function voiceCardMarkup(url,id){
+ const escapeVoiceValue=value=>String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+ const safeUrl=escapeVoiceValue(url),safeId=escapeVoiceValue(id);
+ const bars=v13WaveHeights.map((h,i)=>`<span class="v13-bar" style="height:${h}px" data-bar="${i}"></span>`).join('');
+ return `<div class="v13-voice" data-voice-id="${safeId}"><button class="v13-play" type="button" aria-label="پخش پیام صوتی" data-v13-play="1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"/></svg></button><div class="v13-middle"><div class="v13-wave" data-v13-seek="1" role="slider" tabindex="0" aria-label="موقعیت پخش ویس" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">${bars}</div><span class="v13-duration">۰:۰۰</span></div><button class="v13-speed" type="button" data-v13-speed="1" aria-label="سرعت پخش">1x</button><audio preload="metadata" src="${safeUrl}"></audio></div>`;
+}
+function v13Time(seconds){if(!Number.isFinite(seconds)||seconds<0)return '۰:۰۰';const n=Math.floor(seconds),v=`${Math.floor(n/60)}:${String(n%60).padStart(2,'0')}`;return v.replace(/\d/g,c=>'۰۱۲۳۴۵۶۷۸۹'[Number(c)])}
+function v13Update(box){const a=box.querySelector('audio');if(!a)return;const total=Number.isFinite(a.duration)?a.duration:0;const percent=total?Math.max(0,Math.min(1,a.currentTime/total)):0;box.querySelectorAll('.v13-bar').forEach((bar,i,arr)=>bar.classList.toggle('played',(i+.5)/arr.length<=percent));const time=box.querySelector('.v13-duration');if(time)time.textContent=v13Time(a.paused&&a.currentTime===0?total:a.currentTime)+(a.paused&&a.currentTime===0?'':' / '+v13Time(total));const slider=box.querySelector('.v13-wave');if(slider)slider.setAttribute('aria-valuenow',String(Math.round(percent*100)));const btn=box.querySelector('.v13-play');if(btn){btn.setAttribute('aria-label',a.paused?'پخش پیام صوتی':'توقف پیام صوتی');btn.innerHTML=a.paused?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"/></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>'}}
+document.addEventListener('click',async e=>{const btn=e.target.closest('[data-v13-play],[data-v13-speed],[data-v13-seek]');if(!btn)return;const box=btn.closest('.v13-voice'),a=box?.querySelector('audio');if(!a)return;e.preventDefault();e.stopImmediatePropagation();if(btn.hasAttribute('data-v13-play')){if(a.paused){document.querySelectorAll('.v13-voice audio').forEach(other=>{if(other!==a)other.pause()});try{await a.play()}catch(err){alert('پخش ویس ممکن نشد: '+err.message)}}else a.pause()}else if(btn.hasAttribute('data-v13-speed')){a.playbackRate=a.playbackRate===1?1.5:a.playbackRate===1.5?2:1;btn.textContent=a.playbackRate+'x'}else if(Number.isFinite(a.duration)&&a.duration>0){const r=btn.getBoundingClientRect();a.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*a.duration}v13Update(box)},true);
+document.addEventListener('keydown',e=>{const wave=e.target.closest('[data-v13-seek]');if(!wave||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;const a=wave.closest('.v13-voice')?.querySelector('audio');if(!a||!Number.isFinite(a.duration))return;e.preventDefault();a.currentTime=e.key==='Home'?0:e.key==='End'?a.duration:Math.max(0,Math.min(a.duration,a.currentTime+(e.key==='ArrowRight'?5:-5)));v13Update(wave.closest('.v13-voice'))});
+for(const eventName of ['loadedmetadata','timeupdate','play','pause','ended','durationchange'])document.addEventListener(eventName,e=>{if(e.target.matches?.('.v13-voice audio'))v13Update(e.target.closest('.v13-voice'))},true);
+
+
+
+
 </script></body></html>
