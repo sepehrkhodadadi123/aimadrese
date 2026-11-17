@@ -759,7 +759,120 @@ const ai26Style=document.createElement('style');ai26Style.textContent=`
 .ai26-tip{background:#f0e9ff;border-radius:14px;padding:12px;margin-top:10px;color:#512d9c}.ai26-tip b{font-size:12px}.ai26-tip p{font-size:12px;line-height:1.8;margin:4px 0 0}.ai26-foot{font-size:10px;color:#7d6d96;margin:11px 0 0}.ai26-disclaimer{font-size:10px;color:#867997;line-height:1.8;margin:8px 0 0}
 @media(max-width:370px){.ai26-grid{grid-template-columns:1fr}.ai26-title{flex-wrap:wrap}}
 `;document.head.appendChild(ai26Style);
-function ai25Page(){ai25Style();const d=ai25Data||{people:[],topics:[],daily:[]};const people=d.people||[],topics=d.topics||[],daily=d.daily||[];const selected=people.find(x=>x.id===ai25Student);const scope=selected?[selected.id]:people.map(x=>x.id);const rows=daily.filter(x=>scope.includes(x.student_id));const counts=topics.filter(x=>scope.includes(x.student_id));const total=rows.reduce((a,x)=>a+Number(x.questions||0),0);const active=new Set(rows.filter(x=>Number(x.questions)>0).map(x=>x.student_id)).size;const days=[];for(let i=ai25Range-1;i>=0;i--){const dt=new Date();dt.setHours(12,0,0,0);dt.setDate(dt.getDate()-i);const key=[dt.getFullYear(),String(dt.getMonth()+1).padStart(2,'0'),String(dt.getDate()).padStart(2,'0')].join('-');days.push({date:key,questions:rows.filter(x=>x.day===key).reduce((a,x)=>a+Number(x.questions||0),0)})}const byTopic=new Map();for(const x of counts)byTopic.set(x.topic,(byTopic.get(x.topic)||0)+Number(x.mentions||0));const maxTopic=Math.max(1,...byTopic.values());const leader=[...byTopic].sort((a,b)=>b[1]-a[1]);const name=selected?ai25Safe(selected.display_name||'دانش‌آموز'):'همه دانش‌آموزان';screen.innerHTML=`<div class="ai25"><div class="ai25-head"><div><h2>📊 پایش یادگیری</h2><p class="ai25-sub">گزارش فعالیت دستیار · ${name}</p></div><select class="ai25-select" id="ai25-range"><option value="7" ${ai25Range===7?'selected':''}>۷ روز اخیر</option><option value="30" ${ai25Range===30?'selected':''}>۳۰ روز اخیر</option><option value="90" ${ai25Range===90?'selected':''}>۹۰ روز اخیر</option></select></div><div class="ai25-stats"><div class="ai25-stat purple"><small>دانش‌آموزان مجاز</small><b>${ai25Num(people.length)}</b><small>اشتراک گزارش فعال</small></div><div class="ai25-stat"><small>پرسش‌های بازه</small><b>${ai25Num(total)}</b><small>ارسال‌شده به دستیار</small></div><div class="ai25-stat"><small>دانش‌آموزان فعال</small><b>${ai25Num(active)}</b><small>حداقل یک پرسش</small></div><div class="ai25-stat"><small>زمان مطالعه</small><b>—</b><small>هنوز ثبت نمی‌شود</small></div></div>${ai26Box()}<div class="ai25-tabs"><button class="ai25-tab ${!selected?'active':''}" data-ai25-student="">همه</button>${people.slice(0,3).map(x=>`<button class="ai25-tab ${x.id===ai25Student?'active':''}" data-ai25-student="${ai25Safe(x.id)}">${ai25Safe((x.display_name||'دانش‌آموز').split(' ')[0])}</button>`).join('')}</div><section class="ai25-panel"><strong>📈 روند پرسش‌های آموزشی</strong><p class="ai25-sub">تعداد پیام‌های دانش‌آموز به دستیار در هر روز</p>${ai25Trend(days)}</section><section class="ai25-panel"><strong>📚 موضوعات پرتکرار</strong><p class="ai25-sub">فراوانی موضوعات شناسایی‌شده؛ نه درصد تسلط</p>${leader.length?leader.map(([topic,n])=>`<div class="ai25-row"><span style="min-width:48px">${ai25Safe(topic)}</span><div class="ai25-bar"><div class="ai25-fill" style="width:${Math.round(n/maxTopic*100)}%"></div></div><b>${ai25Num(n)}</b></div>`).join(''):'<div class="ai25-empty">هنوز موضوعی ثبت نشده است.</div>'}<div class="ai25-note">⚠️ تعداد سؤال، مدت مطالعه یا میزان تسلط را ثابت نمی‌کند. برای شناسایی ضعف واقعی، آزمون‌های نمره‌دار و زمان‌سنج مطالعه باید به سیستم اضافه شوند.</div></section><section class="ai25-panel"><strong>👥 دانش‌آموزان</strong><input id="ai25-search" class="ai25-search" style="width:100%;margin-top:12px" placeholder="جستجوی دانش‌آموز..." value=""> <div id="ai25-people">${ai25People(people)}</div></section><div class="ai25-note">🔄 گزارش با بازکردن صفحه و سپس هر ۶۰ ثانیه از داده‌های ثبت‌شده به‌روزرسانی می‌شود. فقط دانش‌آموزانی دیده می‌شوند که اشتراک گزارش را فعال کرده‌اند. متن چت خصوصی نمایش داده نمی‌شود.</div><button class="chip" data-page="teacher-dashboard" style="margin-top:15px">بازگشت به داشبورد</button></div>`;composer.classList.add('hidden');ai26Start()}
+
+// V27: evidence-based, subtopic-level learning signals. No raw chat shared.
+const ai27Catalog=[
+ ['ریاضی','دلتا و مميز معادله درجه دوم',/دلتا|مميز|ممیز/],
+ ['ریاضی','فرمول حل معادله درجه دوم',/فرمول کلی|فرمول درجه دوم|ریشه های معادله|ریشه‌های معادله/],
+ ['ریاضی','معادله درجه دوم',/معادله درجه دوم|درجه دو/],
+ ['ریاضی','معادله درجه اول',/معادله درجه اول|معادله خطی/],
+ ['ریاضی','تابع و دامنه',/دامنه تابع|برد تابع|دامنه و برد/],
+ ['ریاضی','مشتق و قواعد مشتق‌گیری',/مشتق|مشتق گیری|مشتق‌گیری/],
+ ['ریاضی','حد و پیوستگی',/پیوستگی|حد تابع|حد در ریاضی/],
+ ['ریاضی','انتگرال',/انتگرال/],
+ ['ریاضی','مثلثات',/مثلثات|سینوس|کسینوس|تانژانت/],
+ ['ریاضی','احتمال',/احتمال|جایگشت|ترکیب در احتمال/],
+ ['ریاضی','لگاریتم',/لگاریتم/],
+ ['ریاضی','هندسه تحلیلی',/هندسه تحلیلی|شیب خط|معادله خط/],
+ ['فیزیک','قانون دوم نیوتن',/قانون دوم نیوتن|f\s*=\s*ma|اف مساوی ام آ/],
+ ['فیزیک','نیرو و اصطکاک',/اصطکاک|نیروی عمودی|نیروی خالص/],
+ ['فیزیک','حرکت‌شناسی و شتاب',/شتاب|سرعت متوسط|حرکت یکنواخت|نمودار مکان زمان/],
+ ['فیزیک','کار و انرژی',/انرژی جنبشی|انرژی پتانسیل|کار و انرژی/],
+ ['فیزیک','الکتریسیته و مدار',/قانون اهم|مقاومت الکتریکی|مدار الکتریکی|ولتاژ/],
+ ['شیمی','موازنه واکنش',/موازنه|ضرایب واکنش/],
+ ['شیمی','مول و استوکیومتری',/استوکیومتری|محاسبه مول|جرم مولی/],
+ ['شیمی','ساختار اتم',/ساختار اتم|عدد اتمی|آرایش الکترونی/],
+ ['زبان','زمان‌های انگلیسی',/present perfect|past simple|زمان حال کامل|زمان گذشته ساده/],
+ ['زبان','گرامر شرطی',/conditional|جمله شرطی|شرطی نوع/],
+ ['فارسی','آرایه‌های ادبی',/تشبیه|استعاره|کنایه|آرایه ادبی/],
+ ['فارسی','دستور زبان فارسی',/نهاد و گزاره|مفعول|مسند|دستور زبان/],
+ ['علوم','سلول و اندامک‌ها',/اندامک|میتوکندری|سلول/]
+];
+let ai27Rows=[],ai27Busy=false,ai27Timer=null,ai27LoadedAt='';
+function ai27Signal(text){
+ const t=String(text||'').replace(/ي/g,'ی').replace(/ك/g,'ک');
+ const difficulty=/نمی\s*فهمم|نفهمیدم|متوجه\s*نمی\s*شم|متوجه\s*نمی\s*شوم|بلد\s*نیستم|نمی\s*تونم|نمی\s*توانم|اشتباه\s*حل\s*کردم|برام\s*سخته|برام\s*سخت\s*است|مشکل\s*دارم|گیر\s*کردم|یاد\s*نگرفتم/.test(t);
+ const confidence=/بلدم|یاد\s*گرفتم|فهمیدم|متوجه\s*شدم|آسون\s*بود|آسان\s*بود/.test(t)&&!difficulty;
+ const practice=/تمرین|سوال\s*بده|سؤال\s*بده|تست\s*بده|مثال\s*بزن/.test(t);
+ if(!difficulty&&!confidence&&!practice)return [];
+ const matches=ai27Catalog.filter(x=>x[2].test(t));
+ // If the message is a follow-up ("I didn't understand"), use the latest explicit subtopic
+ // from recent student chat, not a broad subject guess.
+ if(!matches.length&&difficulty){
+   const recent=(s.messages||[]).slice(-9).reverse();
+   for(const m of recent){
+    const found=ai27Catalog.find(x=>x[2].test(String(m.text||m.content||'')));
+    if(found){matches.push(found);break;}
+   }
+ }
+ const chosen=matches.filter((x,i)=>!matches.some((y,j)=>i!==j&&x[0]===y[0]&&x[1]!==y[1]&&x[1].includes(y[1])));
+ return chosen.slice(0,2).map(x=>({subject:x[0],subtopic:x[1],signal:difficulty?'self_reported_difficulty':confidence?'self_reported_confidence':'practice_requested'}));
+}
+async function ai27Record(text){
+ if(appProfile?.role!=='student')return;
+ const signals=ai27Signal(text);
+ if(!signals.length)return;
+ try{
+  const a=await ai23Auth();
+  await sbRequest('/rest/v1/ai27_learning_evidence',{method:'POST',token:a.access_token,headers:{Prefer:'return=minimal'},body:JSON.stringify(signals.map(x=>({...x,student_id:a.user.id})))});
+ }catch(e){console.warn('AI27 learning evidence was not saved:',e);}
+}
+const ai27PriorSave=ai23SaveMessage;
+ai23SaveMessage=async function(role,content){
+ const result=await ai27PriorSave(role,content);
+ if(role==='user')ai27Record(content).catch(console.warn);
+ return result;
+};
+function ai27Card(){
+ const ids=ai25Student?[ai25Student]:(ai25Data?.people||[]).map(x=>x.id);
+ const rows=ai27Rows.filter(x=>ids.includes(x.student_id));
+ const grouped=new Map();
+ for(const x of rows){
+  const key=x.student_id+'|'+x.subtopic;
+  if(!grouped.has(key))grouped.set(key,{...x,frequency:0,latest:x.created_at});
+  const g=grouped.get(key);g.frequency++;
+  if(x.created_at>g.latest){g.latest=x.created_at;g.signal=x.signal}
+ }
+ const entries=[...grouped.values()].sort((a,b)=>b.latest.localeCompare(a.latest));
+ const weak=entries.filter(x=>x.signal==='self_reported_difficulty');
+ const claimed=entries.filter(x=>x.signal==='self_reported_confidence');
+ const practice=entries.filter(x=>x.signal==='practice_requested');
+ const render=(arr,empty)=>arr.length?arr.map(x=>`<div class="ai27-item"><b>${ai25Safe(x.subtopic)}</b><small>${ai25Safe(x.subject)} · ${ai25Num(x.frequency)} نشانه ثبت‌شده</small></div>`).join(''):`<p class="ai27-empty">${empty}</p>`;
+ return `<section class="ai27-card" id="ai27-card">
+ <div class="ai27-header"><strong>🧠 نقشه دقیق یادگیری</strong><span>● بررسی هر ۵ ثانیه</span></div>
+ <p class="ai27-sub">بر اساس نشانه‌های مشخص در گفت‌وگوی دانش‌آموز با دستیار</p>
+ <div class="ai27-section ai27-weak"><b>🔴 اشکال اعلام‌شده توسط دانش‌آموز (${ai25Num(weak.length)})</b>${render(weak,'هنوز اشکال مشخصی ثبت نشده است.')}</div>
+ <div class="ai27-section ai27-practice"><b>🟠 نیازمند تمرین و ارزیابی (${ai25Num(practice.length)})</b>${render(practice,'هنوز درخواست تمرین مرتبط ثبت نشده است.')}</div>
+ <div class="ai27-section ai27-good"><b>🟢 اعلام کرده متوجه شده (${ai25Num(claimed.length)})</b>${render(claimed,'هنوز گزارشی از فهمیدن موضوع ثبت نشده است.')}</div>
+ <div class="ai27-reco"><b>💡 اقدام پیشنهادی معلم</b><p>${weak.length?'برای «'+ai25Safe(weak[0].subtopic)+'» یک سؤال تشخیصی طراحی کنید و پاسخ دانش‌آموز را بررسی کنید.':'از دانش‌آموز بخواهید درباره یک مبحث مشخص، تمرین حل کند.'}</p></div>
+ <small class="ai27-caveat">این گزارش از متن چت، فقط موضوع و نوع نشانه را استخراج می‌کند؛ ادعای «بلد نیست» یا «مسلط است» بدون ارزیابی پاسخ معتبر نیست. متن خصوصی گفت‌وگو در اختیار معلم قرار نمی‌گیرد.</small>
+ <small class="ai27-updated">آخرین همگام‌سازی: ${ai27LoadedAt||'در انتظار دریافت'}</small>
+ </section>`;
+}
+async function ai27Refresh(){
+ if(ai27Busy||s.page!=='ai25-teacher'||!ai25Data)return;
+ ai27Busy=true;
+ try{
+  const a=await ai23Auth(),ids=(ai25Data.people||[]).map(p=>p.id);
+  if(ids.length){
+   const query='/rest/v1/ai27_learning_evidence?select=student_id,subject,subtopic,signal,created_at&student_id=in.('+ids.map(encodeURIComponent).join(',')+')&order=created_at.desc&limit=500';
+   ai27Rows=await Promise.race([sbRequest(query,{token:a.access_token}),new Promise((_,reject)=>setTimeout(()=>reject(Error('timeout')),4500))])||[];
+  }else ai27Rows=[];
+  ai27LoadedAt=new Date().toLocaleTimeString('fa-IR');
+  const el=document.getElementById('ai27-card');if(el)el.outerHTML=ai27Card();
+ }catch(e){const el=document.querySelector('.ai27-updated');if(el)el.textContent='خطا در دریافت نشانه‌ها؛ SQL نسخه ۲۷ و دسترسی‌ها را بررسی کنید.';console.warn('AI27 teacher fetch',e)}
+ finally{ai27Busy=false}
+}
+function ai27Start(){
+ if(ai27Timer)clearInterval(ai27Timer);
+ ai27Refresh();
+ ai27Timer=setInterval(()=>{if(s.page==='ai25-teacher')ai27Refresh();else{clearInterval(ai27Timer);ai27Timer=null}},5000);
+}
+const ai27Css=document.createElement('style');
+ai27Css.textContent=`.ai27-card{direction:rtl;border:1px solid #e6d8ff;border-radius:20px;background:#fff;padding:14px;margin:14px 0;box-shadow:0 5px 22px #6044a30e}.ai27-header{display:flex;justify-content:space-between;align-items:center;gap:8px}.ai27-header strong{font-size:15px;color:#43208c}.ai27-header span{font-size:10px;color:#13935e}.ai27-sub{font-size:11px;color:#84759c;line-height:1.7}.ai27-section{border-radius:13px;padding:12px;margin:9px 0}.ai27-section>b{font-size:12px}.ai27-weak{background:#fff0f3;color:#a62e4c}.ai27-practice{background:#fff7e8;color:#a2680c}.ai27-good{background:#eaf9f0;color:#117d4b}.ai27-item{display:flex;flex-direction:column;gap:3px;border-top:1px solid #ffffffaa;margin-top:9px;padding-top:9px}.ai27-item b{font-size:12px}.ai27-item small{font-size:10px}.ai27-empty{font-size:11px;margin:8px 0 0}.ai27-reco{background:#f1eaff;color:#55349c;border-radius:13px;padding:12px;margin:10px 0}.ai27-reco b{font-size:12px}.ai27-reco p{font-size:12px;line-height:1.8;margin:6px 0}.ai27-caveat,.ai27-updated{display:block;font-size:10px;color:#847594;line-height:1.7;margin-top:8px}`;
+document.head.appendChild(ai27Css);
+
+function ai25Page(){ai25Style();const d=ai25Data||{people:[],topics:[],daily:[]};const people=d.people||[],topics=d.topics||[],daily=d.daily||[];const selected=people.find(x=>x.id===ai25Student);const scope=selected?[selected.id]:people.map(x=>x.id);const rows=daily.filter(x=>scope.includes(x.student_id));const counts=topics.filter(x=>scope.includes(x.student_id));const total=rows.reduce((a,x)=>a+Number(x.questions||0),0);const active=new Set(rows.filter(x=>Number(x.questions)>0).map(x=>x.student_id)).size;const days=[];for(let i=ai25Range-1;i>=0;i--){const dt=new Date();dt.setHours(12,0,0,0);dt.setDate(dt.getDate()-i);const key=[dt.getFullYear(),String(dt.getMonth()+1).padStart(2,'0'),String(dt.getDate()).padStart(2,'0')].join('-');days.push({date:key,questions:rows.filter(x=>x.day===key).reduce((a,x)=>a+Number(x.questions||0),0)})}const byTopic=new Map();for(const x of counts)byTopic.set(x.topic,(byTopic.get(x.topic)||0)+Number(x.mentions||0));const maxTopic=Math.max(1,...byTopic.values());const leader=[...byTopic].sort((a,b)=>b[1]-a[1]);const name=selected?ai25Safe(selected.display_name||'دانش‌آموز'):'همه دانش‌آموزان';screen.innerHTML=`<div class="ai25"><div class="ai25-head"><div><h2>📊 پایش یادگیری</h2><p class="ai25-sub">گزارش فعالیت دستیار · ${name}</p></div><select class="ai25-select" id="ai25-range"><option value="7" ${ai25Range===7?'selected':''}>۷ روز اخیر</option><option value="30" ${ai25Range===30?'selected':''}>۳۰ روز اخیر</option><option value="90" ${ai25Range===90?'selected':''}>۹۰ روز اخیر</option></select></div><div class="ai25-stats"><div class="ai25-stat purple"><small>دانش‌آموزان مجاز</small><b>${ai25Num(people.length)}</b><small>اشتراک گزارش فعال</small></div><div class="ai25-stat"><small>پرسش‌های بازه</small><b>${ai25Num(total)}</b><small>ارسال‌شده به دستیار</small></div><div class="ai25-stat"><small>دانش‌آموزان فعال</small><b>${ai25Num(active)}</b><small>حداقل یک پرسش</small></div><div class="ai25-stat"><small>زمان مطالعه</small><b>—</b><small>هنوز ثبت نمی‌شود</small></div></div>${ai27Card()}<div class="ai25-tabs"><button class="ai25-tab ${!selected?'active':''}" data-ai25-student="">همه</button>${people.slice(0,3).map(x=>`<button class="ai25-tab ${x.id===ai25Student?'active':''}" data-ai25-student="${ai25Safe(x.id)}">${ai25Safe((x.display_name||'دانش‌آموز').split(' ')[0])}</button>`).join('')}</div><section class="ai25-panel"><strong>📈 روند پرسش‌های آموزشی</strong><p class="ai25-sub">تعداد پیام‌های دانش‌آموز به دستیار در هر روز</p>${ai25Trend(days)}</section><section class="ai25-panel"><strong>📚 موضوعات پرتکرار</strong><p class="ai25-sub">فراوانی موضوعات شناسایی‌شده؛ نه درصد تسلط</p>${leader.length?leader.map(([topic,n])=>`<div class="ai25-row"><span style="min-width:48px">${ai25Safe(topic)}</span><div class="ai25-bar"><div class="ai25-fill" style="width:${Math.round(n/maxTopic*100)}%"></div></div><b>${ai25Num(n)}</b></div>`).join(''):'<div class="ai25-empty">هنوز موضوعی ثبت نشده است.</div>'}<div class="ai25-note">⚠️ تعداد سؤال، مدت مطالعه یا میزان تسلط را ثابت نمی‌کند. برای شناسایی ضعف واقعی، آزمون‌های نمره‌دار و زمان‌سنج مطالعه باید به سیستم اضافه شوند.</div></section><section class="ai25-panel"><strong>👥 دانش‌آموزان</strong><input id="ai25-search" class="ai25-search" style="width:100%;margin-top:12px" placeholder="جستجوی دانش‌آموز..." value=""> <div id="ai25-people">${ai25People(people)}</div></section><div class="ai25-note">🔄 گزارش با بازکردن صفحه و سپس هر ۶۰ ثانیه از داده‌های ثبت‌شده به‌روزرسانی می‌شود. فقط دانش‌آموزانی دیده می‌شوند که اشتراک گزارش را فعال کرده‌اند. متن چت خصوصی نمایش داده نمی‌شود.</div><button class="chip" data-page="teacher-dashboard" style="margin-top:15px">بازگشت به داشبورد</button></div>`;composer.classList.add('hidden');ai27Start()}
 function ai25People(people,query=''){return people.filter(p=>(p.display_name||'').includes(query)).map(p=>`<button class="ai25-person ${p.id===ai25Student?'selected':''}" data-ai25-student="${ai25Safe(p.id)}"><span><strong>👤 ${ai25Safe(p.display_name||'دانش‌آموز')}</strong><small>پایه ${ai25Safe(p.grade||'نامشخص')} · گزارش مجاز</small></span><span class="ai25-chip">مشاهده روند</span></button>`).join('')||'<div class="ai25-empty">دانش‌آموزی پیدا نشد.</div>'}
 async function ai25Load(){
  if(ai25Busy)return;
