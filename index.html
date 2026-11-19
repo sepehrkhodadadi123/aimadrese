@@ -840,8 +840,7 @@ function chatMarkup(){
   }
   const text=m.deleted_at?'<div class="v8-bubble-text v14-deleted">این پیام حذف شده است.</div>':parsed.text&&parsed.text.trim()?`<div class="v8-bubble-text">${appEsc(parsed.text).replace(/\n/g,'<br>')}</div>`:'';
   const quote=parsed.reply&&!m.deleted_at?`<button type="button" class="v64-quoted" data-chat-jump="${appEsc(parsed.reply.id)}" title="رفتن به پیام اصلی"><strong>↪ ${appEsc(parsed.reply.name)}</strong><span>${appEsc(parsed.reply.preview||'پیام')}</span></button>`:'';
-  const menu=`<div class="v14-actions"><button type="button" class="v14-more" data-v14-menu="${appEsc(m.id)}" aria-label="گزینه‌های پیام" aria-expanded="${v14OpenMenu===m.id}">⋮</button>${v14OpenMenu===m.id?`<div class="v14-menu">${!m.deleted_at?`<button data-v14-action="reply" data-v14-id="${appEsc(m.id)}">↩ پاسخ دادن</button>`:''}${mine&&!m.deleted_at&&!m.attachment_path?`<button data-v14-action="edit" data-v14-id="${appEsc(m.id)}">✎ ویرایش پیام</button>`:''}${!m.deleted_at?`<button data-v14-action="${m.pinned_at?'unpin':'pin'}" data-v14-id="${appEsc(m.id)}">📌 ${m.pinned_at?'برداشتن پین':'پین کردن'}</button>`:''}${mine&&!m.deleted_at?`<button class="danger" data-v14-action="delete" data-v14-id="${appEsc(m.id)}">🗑 حذف پیام</button>`:''}</div>`:''}</div>`;
-  return `<div data-chat-mid="${appEsc(m.id)}" class="v8-message ${mine?'v8-out':'v8-in'}"><div class="v14-msg-row"><div class="v8-message-content">${quote}${text}${attachment}<div class="v8-message-meta"><time>${stamp}</time>${m.edited_at&&!m.deleted_at?'<span class="v14-edited">ویرایش‌شده</span>':''}${m.pinned_at&&!m.deleted_at?' <span title="پین شده">📌</span>':''}${mine?'<span aria-label="ارسال شده">✓✓</span>':''}</div></div>${menu}${!m.deleted_at?`<button type="button" class="v64-reply-trigger" data-v14-action="reply" data-v14-id="${appEsc(m.id)}" title="پاسخ به پیام" aria-label="پاسخ به پیام"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 10 4 15l5 5"/><path d="M4 15h10a6 6 0 0 0 6-6V5"/></svg></button>`:''}${CHAT_REACTION_SAFE_MODE?'':`<button type="button" class="v54-react-trigger" data-v54-react="${appEsc(m.id)}" title="انتخاب واکنش" aria-label="انتخاب واکنش"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="12" r="8"/><path d="M8 14.5q3 3 6 0M8.5 10h.01M13.5 10h.01M19 2v6M16 5h6"/></svg></button>`}<span class="v54-reaction" data-v54-reaction-for="${appEsc(m.id)}">${reaction}</span></div></div>`;
+  return `<div data-chat-mid="${appEsc(m.id)}" class="v8-message ${mine?'v8-out':'v8-in'}" data-v66-active="${m.deleted_at?'0':'1'}" tabindex="0" aria-label="پیام؛ با کشیدن پاسخ دهید، با دو ضربه واکنش بگذارید"><div class="v14-msg-row"><div class="v8-message-content">${quote}${text}${attachment}<div class="v8-message-meta"><time>${stamp}</time>${m.edited_at&&!m.deleted_at?'<span class="v14-edited">ویرایش‌شده</span>':''}${m.pinned_at&&!m.deleted_at?' <span title="پین شده">📌</span>':''}${mine?'<span aria-label="ارسال شده">✓✓</span>':''}</div></div><span class="v54-reaction" data-v54-reaction-for="${appEsc(m.id)}">${reaction}</span></div></div>`;
  }).join('');
  return `<section class="chat-panel v8-chat" data-chat-build="reaction-direct-v63" aria-label="گفت‌وگوی خصوصی">
  <div class="v8-chat-header"><button type="button" class="v8-back" data-page="messages" aria-label="بازگشت به پیام‌ها">❯</button><div class="v8-person-avatar">${avatar}${onlineMark(other)}</div><div class="v8-person-info"><strong>${name}</strong><small>${isUserOnline(other)?'🟢 آنلاین':'⚪ آفلاین'} · ${other?.role==='teacher'?'معلم':'دانش‌آموز'} · گفت‌وگوی آموزشی خصوصی</small></div><button type="button" class="v64-header-delete" data-chat-delete="${appEsc(appChatId)}" title="حذف گفت‌وگو از حساب من" aria-label="حذف گفت‌وگو"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 4h4M6.5 7l1 13h9l1-13M10 11v6M14 11v6"/></svg></button></div>
@@ -1937,6 +1936,23 @@ const ai49Css=document.createElement('style');ai49Css.textContent=`.ai49-launch{
  },true);
 })();
 
+
+window.aiChatV66={
+ info(id){const m=appMessages.find(x=>String(x.id)===String(id));if(!m)return null;
+  return {id:String(m.id),deleted:!!m.deleted_at,mine:m.sender_id===authSession?.user?.id,
+   pinned:!!m.pinned_at,hasAttachment:!!m.attachment_path};},
+ reply(id){const m=appMessages.find(x=>String(x.id)===String(id));if(!m||m.deleted_at)return false;
+  chatReplyStart(m);return true;},
+ edit(id){const m=appMessages.find(x=>String(x.id)===String(id));
+  if(!m||m.deleted_at||m.sender_id!==authSession?.user?.id||m.attachment_path)return false;
+  v14ShowEditor(m);return true;},
+ async action(id,action){const m=appMessages.find(x=>String(x.id)===String(id));if(!m||m.deleted_at)return false;
+  const mine=m.sender_id===authSession?.user?.id;
+  if(action==='delete'&&!mine)return false;
+  if(action==='delete'&&!await window.ai56Confirm('این پیام برای هر دو طرف حذف شود؟'))return false;
+  if(!['delete','pin','unpin'].includes(action))return false;
+  await v14MessageAction(action,m.id);return true;}
+};
 initApp()})();
 
 // Voice playback uses the actual audio duration and currentTime; waveform bars are visual.
@@ -2016,8 +2032,8 @@ for(const eventName of ['loadedmetadata','timeupdate','play','pause','ended','du
   p.style.top=Math.max(8,Math.min(innerHeight-65,r.top-70))+'px';
  }
  document.addEventListener('click',e=>{
+  if(swallowMessageClick&&Date.now()<=swallowMessageClick.until){const row=e.target.closest('#chat-feed [data-chat-mid]');if(row?.dataset.chatMid===swallowMessageClick.id){e.preventDefault();e.stopImmediatePropagation();swallowMessageClick=null;return;}}
   const p=document.getElementById('v54-picker'),r=document.getElementById('v54-reactions');
-  if(suppressClick){suppressClick=false;e.preventDefault();return}
   const toggle=e.target.closest('[data-v54-picker]');if(toggle){e.preventDefault();if(p){p.hidden=!p.hidden;if(!p.hidden)pickerRender()}return}
   const t=e.target.closest('[data-v54-tab]');if(t){tab=t.dataset.v54Tab;pickerRender();return}
   const insert=e.target.closest('[data-v54-insert]');if(insert){const input=document.querySelector('#app-chat-form input[name="body"]');if(input){const i=input.selectionStart??input.value.length;input.setRangeText(insert.dataset.v54Insert,i,input.selectionEnd??i,'end');input.dispatchEvent(new Event('input',{bubbles:true}));input.focus()}if(p)p.hidden=true;return}
@@ -2027,10 +2043,111 @@ for(const eventName of ['loadedmetadata','timeupdate','play','pause','ended','du
   if(p&&!e.target.closest('#v54-picker'))p.hidden=true;
   if(r&&!e.target.closest('#v54-reactions'))r.hidden=true;
  },true);
- document.addEventListener('pointerdown',e=>{const n=e.target.closest('#chat-feed [data-chat-mid]');if(!n||e.target.closest('button,a,input'))return;clearTimeout(longTimer);longTimer=setTimeout(()=>{showReactions(n.dataset.chatMid,n);suppressClick=true},510)},{passive:true});
- ['pointerup','pointercancel','pointermove'].forEach(ev=>document.addEventListener(ev,()=>clearTimeout(longTimer),{passive:true}));
- // Double-click on desktop opens reactions as well.
- document.addEventListener('dblclick',e=>{const n=e.target.closest('#chat-feed [data-chat-mid]');if(n)showReactions(n.dataset.chatMid,n)});
+
+ // V66: Telegram-like gestures, scoped to the private chat. No MutationObserver.
+ let gesture=null, lastTap=null, swallowMessageClick=null;
+ function dismissActionSheet(){document.querySelector('#v66-action-layer')?.remove();}
+ function messageFromId(id){return window.aiChatV66?.info(id);}
+ function showActionSheet(id){
+  const m=messageFromId(id);if(!m||m.deleted)return;
+  dismissActionSheet();
+  const mine=m.mine;
+  const sheet=document.createElement('div');sheet.id='v66-action-layer';sheet.className='v66-action-layer';const openedAt=Date.now();
+  sheet.innerHTML=`<div class="v66-action-sheet" role="dialog" aria-modal="true" aria-label="گزینه‌های پیام">
+   <div class="v66-action-grip"></div><div class="v66-action-title">گزینه‌های پیام</div>
+   <div class="v66-action-items">
+    <button type="button" data-v66-action="reply">↩ <span>پاسخ دادن</span></button>
+    <button type="button" data-v66-action="${m.pinned?'unpin':'pin'}">📌 <span>${m.pinned?'برداشتن پین':'پین کردن'}</span></button>
+    ${mine&&!m.hasAttachment?'<button type="button" data-v66-action="edit">✎ <span>ویرایش پیام</span></button>':''}
+    ${mine?'<button type="button" class="v66-danger" data-v66-action="delete">🗑 <span>حذف پیام</span></button>':''}
+   </div><button type="button" class="v66-action-cancel" data-v66-dismiss="1">بستن</button>
+  </div>`;
+  sheet.addEventListener('click',async e=>{
+   const btn=e.target.closest('[data-v66-action]');
+   if(!btn){if(e.target===sheet&&Date.now()-openedAt<450)return;if(e.target===sheet||e.target.closest('[data-v66-dismiss]'))dismissActionSheet();return;}
+   const action=btn.dataset.v66Action;dismissActionSheet();
+   try{
+    if(action==='reply')window.aiChatV66.reply(id);
+    else if(action==='edit')window.aiChatV66.edit(id);
+    else await window.aiChatV66.action(id,action);
+   }catch(err){alert('خطا: '+err.message)}
+  });
+  document.body.appendChild(sheet);
+ }
+ function clearLongPress(){clearTimeout(longTimer);longTimer=null;}
+ function clearGesture(){
+  clearLongPress();
+  if(gesture?.bubble){const b=gesture.bubble;b.classList.remove('v66-dragging');b.style.transform='';}
+  gesture=null;
+ }
+ document.addEventListener('pointerdown',e=>{
+  if(e.pointerType==='mouse'&&e.button!==0)return;
+  if(e.target.closest('button,a,input,textarea,select,video,audio,[contenteditable="true"]'))return;
+  const bubble=e.target.closest('#chat-feed .v8-message-content');
+  const row=bubble?.closest('[data-chat-mid]');
+  if(!row||row.dataset.v66Active==='0')return;
+  dismissActionSheet();
+  clearGesture();
+  gesture={id:row.dataset.chatMid,pointerId:e.pointerId,pointerType:e.pointerType,
+   bubble,row,startX:e.clientX,startY:e.clientY,dx:0,dy:0,swiping:false,scrolling:false,longPressed:false};
+  longTimer=setTimeout(()=>{
+   if(!gesture||gesture.swiping||gesture.scrolling)return;
+   gesture.longPressed=true;swallowMessageClick={id:gesture.id,until:Date.now()+600};
+   showActionSheet(gesture.id);
+  },580);
+ },{passive:true});
+ document.addEventListener('pointermove',e=>{
+  const g=gesture;if(!g||e.pointerId!==g.pointerId)return;
+  g.dx=e.clientX-g.startX;g.dy=e.clientY-g.startY;
+  const ax=Math.abs(g.dx),ay=Math.abs(g.dy);
+  if(ax>9||ay>9)clearLongPress();
+  if(g.longPressed||g.scrolling)return;
+  if(ay>12&&ay>ax*1.1){g.scrolling=true;return;}
+  const direction=g.row.classList.contains('v8-out')?-1:1;
+  if(g.dx*direction>9&&ax>ay*1.15){
+   g.swiping=true;
+   g.bubble.classList.add('v66-dragging');
+   const distance=Math.min(70,(ax-9)*.8);
+   g.bubble.style.transform=`translate3d(${direction*distance}px,0,0)`;
+   if(e.cancelable)e.preventDefault();
+  }
+ },{passive:false});
+ document.addEventListener('pointerup',e=>{
+  const g=gesture;if(!g||e.pointerId!==g.pointerId)return;
+  clearLongPress();gesture=null;
+  g.bubble.classList.remove('v66-dragging');g.bubble.style.transform='';
+  if(g.longPressed)return;
+  if(g.swiping){
+   swallowMessageClick={id:g.id,until:Date.now()+450};
+   const direction=g.row.classList.contains('v8-out')?-1:1;
+   if(g.dx*direction>=62&&Math.abs(g.dy)<65){
+    window.aiChatV66?.reply(g.id);
+   }
+   lastTap=null;return;
+  }
+  if(g.scrolling||Math.abs(g.dx)>14||Math.abs(g.dy)>14){lastTap=null;return;}
+  const now=Date.now();
+  if(lastTap&&lastTap.id===g.id&&now-lastTap.time<380&&
+     Math.hypot(e.clientX-lastTap.x,e.clientY-lastTap.y)<32){
+   lastTap=null;swallowMessageClick={id:g.id,until:now+450};
+   showReactions(g.id,g.bubble);
+   if(e.cancelable)e.preventDefault();
+  }else lastTap={id:g.id,time:now,x:e.clientX,y:e.clientY};
+ },{passive:false});
+ document.addEventListener('pointercancel',()=>{clearGesture();lastTap=null;},{passive:true});
+ document.addEventListener('contextmenu',e=>{
+  const row=e.target.closest('#chat-feed [data-chat-mid]');
+  if(!row||row.dataset.v66Active==='0'||e.target.closest('button,a,input,textarea'))return;
+  e.preventDefault();clearGesture();showActionSheet(row.dataset.chatMid);
+ });
+ document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){dismissActionSheet();return;}
+  const row=e.target.closest('#chat-feed [data-chat-mid]');
+  if(row&&row.dataset.v66Active==='1'&&(e.key==='Enter'||e.key===' '||e.key==='F10')){
+   e.preventDefault();showActionSheet(row.dataset.chatMid);
+  }
+ });
+
 })();
 </script>
 
@@ -2101,4 +2218,23 @@ window.alert=window.ai56Toast;
 @media(prefers-reduced-motion:reduce){.v64-flash{animation:none}}
 </style>
 
+
+<style id="v66-telegram-gestures">
+/* V66: no permanently visible icons beside messages; the header is untouched. */
+.v8-chat #chat-feed .v14-msg-row{position:relative;}
+.v8-chat #chat-feed .v8-message-content{touch-action:pan-y;transition:transform .18s cubic-bezier(.2,.75,.25,1);-webkit-touch-callout:none;}
+.v8-chat #chat-feed .v8-message-content.v66-dragging{transition:none!important;will-change:transform;}
+.v8-chat #chat-feed .v8-message{position:relative;}
+.v8-chat #chat-feed .v8-out .v54-reaction{left:6px!important;right:auto!important;}
+.v8-chat #chat-feed .v8-in .v54-reaction{right:6px!important;left:auto!important;}
+.v66-action-layer{position:fixed;inset:0;z-index:2147483645;background:#21153747;display:flex;align-items:flex-end;justify-content:center;padding:12px;direction:rtl;}
+.v66-action-sheet{width:min(430px,100%);padding:11px 14px 16px;border:1px solid #ede6fb;border-radius:24px;background:#fff;box-shadow:0 20px 60px #24143b4a;font-family:inherit;color:#302448;}
+.v66-action-grip{height:4px;width:40px;margin:0 auto 11px;background:#e2d8f2;border-radius:20px;}
+.v66-action-title{font-size:13px;font-weight:800;margin:3px 4px 12px;}
+.v66-action-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.v66-action-items button{min-height:54px;border:1px solid #eee8fa;background:#faf8ff;border-radius:14px;font:inherit;font-size:12px;color:#574084;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;}
+.v66-action-items button.v66-danger{background:#fff6f7;color:#b63e59;border-color:#ffdee5;}
+.v66-action-cancel{display:block;width:100%;border:0;background:#f0e9fc;border-radius:13px;padding:11px;margin-top:11px;color:#6d4bb2;font:inherit;font-size:12px;font-weight:700;cursor:pointer;}
+@media(prefers-reduced-motion:reduce){.v8-chat #chat-feed .v8-message-content{transition:none!important}}
+</style>
 </body></html>
