@@ -445,7 +445,45 @@ body:has(.v50-auth) #screen{padding:0!important;max-width:none!important}
  .v8-chat .v14-more{width:22px;height:26px}
  .v8-chat .v8-chat-header{gap:7px;padding-inline:6px!important}
 }
-</style></head><body><div class="wrap"><header class="header"><div class="header-label" id="header-label">سلام! 👋</div><img class="brand-logo" src="/aimadrese-logo.png" alt="ای‌آی مدرسه"></header><main class="screen" id="screen"></main><div class="composer hidden" id="composer"><div id="attachment-preview" class="attachment-preview hidden"><span id="attachment-name"></span><button id="remove-attachment" type="button">حذف ×</button></div><input type="file" id="image-file" accept="image/jpeg,image/png,image/webp"><button id="pick-image" class="tool-btn" type="button">📷</button><button id="record-voice" class="tool-btn" type="button">🎙️</button><input id="question" placeholder="سؤالت رو بپرس..."><button id="send" class="send-btn">➤</button></div><nav class="nav hidden" id="nav"><button type="button" data-page="home" aria-label="خانه"><span class="nav-art" aria-hidden="true"><svg class="nav-graphic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/><path d="M10 21v-6h4v6"/></svg></span><span class="nav-caption">خانه</span></button><button type="button" data-page="courses" aria-label="دوره‌ها"><span class="nav-art" aria-hidden="true"><svg class="nav-graphic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="4"/><path d="m10 9 5 3-5 3z"/></svg></span><span class="nav-caption">دوره‌ها</span></button><button type="button" data-page="explore" aria-label="اکسپلور"><span class="nav-art" aria-hidden="true"><svg class="nav-graphic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.8 8.2-2.2 5.4-5.4 2.2 2.2-5.4z"/></svg></span><span class="nav-caption">اکسپلور</span></button><button type="button" data-page="assistant" aria-label="دستیار"><span class="nav-art" aria-hidden="true"><svg class="nav-graphic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="14" rx="5"/><path d="M12 4v3M10 4h4"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M9 17q3 2 6 0"/></svg></span><span class="nav-caption">دستیار</span></button><button type="button" data-page="account-profile" aria-label="پروفایل"><span class="nav-art" aria-hidden="true"><svg class="nav-graphic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 21v-2a7.5 7.5 0 0 1 15 0v2"/></svg></span><span class="nav-caption">پروفایل</span></button></nav></div><script>
+</style><style id="aiq-v67-css">
+/* V67: AI quiz cards are scoped to the student assistant; private chat is unchanged. */
+#screen .msg-wrap.aiq-wrap{width:100%;max-width:100%;align-items:stretch;margin:15px 0 19px}
+#screen .message.assistant.aiq-bubble{max-width:100%;width:100%;padding:0;margin:0;background:transparent;line-height:1.6;border-radius:0;box-shadow:none}
+.aiq-card{direction:rtl;text-align:right;overflow:hidden;background:#fff;border:1px solid #e9e0fb;border-radius:23px;box-shadow:0 12px 36px #51319d12;color:#2a2144;font-family:inherit}
+.aiq-card *{box-sizing:border-box}
+.aiq-top{padding:17px 16px 15px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0ebfa;background:linear-gradient(115deg,#fff,#f9f6ff)}
+.aiq-top .aiq-icon{display:grid;place-items:center;flex:0 0 39px;height:39px;background:linear-gradient(135deg,#a66afa,#7541dd);color:white;border-radius:13px;font-size:21px}
+.aiq-top>div{flex:1;min-width:0}.aiq-top strong{display:block;font-size:15px;line-height:1.6}.aiq-top small{display:block;color:#8a7caa;font-size:10px;margin-top:2px}
+.aiq-tag{font-size:9px;letter-spacing:.5px;background:#f1eaff;color:#8652d6;border-radius:30px;padding:6px 8px;white-space:nowrap;font-weight:800}
+.aiq-intro{padding:22px 18px 12px;text-align:center}.aiq-intro-icon{display:grid;place-items:center;width:67px;height:67px;background:#f3edff;border-radius:22px;margin:0 auto 12px;font-size:32px}
+.aiq-intro h3,.aiq-result h3{font-size:16px!important;margin:0 0 8px!important}.aiq-intro p{font-size:12px;line-height:2;color:#877b9c;margin:0 auto;max-width:270px}
+.aiq-stats{display:flex;justify-content:space-around;gap:6px;margin:14px 15px 17px;background:#f9f6ff;border-radius:14px;padding:12px 5px;color:#6b5894;font-size:11px}
+.aiq-primary,.aiq-secondary{font:inherit;font-weight:750;border-radius:14px;cursor:pointer;padding:12px 17px;transition:transform .15s,background .15s;border:0;font-size:12px}
+.aiq-primary{background:linear-gradient(110deg,#9862ef,#7541dc);color:white;box-shadow:0 5px 13px #7442d524}.aiq-primary:active,.aiq-secondary:active{transform:scale(.98)}
+.aiq-card>.aiq-primary,.aiq-card>.aiq-secondary{display:block;width:calc(100% - 32px);margin:0 16px 16px}
+.aiq-secondary{background:#f2edfb;color:#6942b5}.aiq-secondary:disabled{opacity:.38;cursor:default}
+.aiq-running-meta{display:flex;justify-content:space-between;align-items:center;padding:17px 17px 11px;font-size:12px;color:#6b5b8b;font-weight:750}
+.aiq-clock{font-variant-numeric:tabular-nums;direction:ltr;display:inline-block;background:#f1ebff;color:#7543c9;padding:7px 11px;border-radius:9px}.aiq-clock.urgent{background:#fff0f0;color:#d44362}
+.aiq-progress{height:6px;background:#eee9fa;margin:0 17px;border-radius:10px;overflow:hidden}.aiq-progress>div{height:100%;background:linear-gradient(90deg,#bd8dfb,#7040d5);border-radius:10px;transition:width .2s}
+.aiq-question{padding:20px 18px 14px;margin:0!important;font-size:15px!important;font-weight:800;line-height:2!important;white-space:pre-wrap;overflow-wrap:anywhere}
+.aiq-options{display:grid;gap:10px;padding:0 15px}.aiq-option{display:flex;align-items:center;gap:11px;text-align:right;direction:rtl;width:100%;border:1px solid #e9e2f3;background:#fff;border-radius:14px;padding:12px 11px;font:inherit;color:#33264c;line-height:1.85;cursor:pointer;transition:background .15s,border-color .15s}
+.aiq-option:hover{background:#fbf8ff;border-color:#cbb3fa}.aiq-option.selected{background:#f4eeff;border-color:#9560e8;box-shadow:inset 0 0 0 1px #9560e8}
+.aiq-option-letter{width:29px;height:29px;display:grid;place-items:center;flex:none;background:#f4f0fa;border-radius:10px;color:#7554a5;font-weight:800}.aiq-option.selected .aiq-option-letter{background:#8b53e6;color:#fff}
+.aiq-option>span:nth-child(2){flex:1;min-width:0;font-size:12px;overflow-wrap:anywhere}.aiq-option-check{color:#7c4cdb;font-size:16px;font-weight:800}
+.aiq-answer-count{color:#9587a9;font-size:10px;padding:13px 18px 3px}.aiq-controls{display:flex;gap:9px;padding:14px 16px}.aiq-controls button{flex:1}
+.aiq-finish-warning{margin:11px 16px 0;padding:10px 12px;background:#fff8ed;color:#91641b;border-radius:12px;font-size:11px;line-height:1.8}
+.aiq-dots{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:0 16px 17px}.aiq-dots button{width:8px;height:8px;min-width:8px;border-radius:50%;background:#ded4ee;border:0;padding:0}.aiq-dots button.answered{background:#b28bea}.aiq-dots button.active{background:#7b43d8;width:21px;border-radius:6px}
+.aiq-loading{padding:30px 20px 35px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}.aiq-loading strong{font-size:13px}.aiq-loading p{font-size:11px;color:#86779f}.aiq-spinner{display:block;width:31px;height:31px;border:3px solid #ede4fa;border-top-color:#8548e6;border-radius:50%;animation:aiq-spin .9s linear infinite}@keyframes aiq-spin{to{transform:rotate(360deg)}}
+.aiq-error{margin:15px 16px;color:#b7415c;background:#fff0f4;padding:12px;border-radius:12px;font-size:12px;line-height:1.9}
+.aiq-result{text-align:center;padding:22px 12px 14px}.aiq-ring{width:132px;height:132px;border-radius:50%;margin:0 auto 15px;background:conic-gradient(#8550e8 calc(var(--aiq-score)*1%),#eee7fa 0);display:grid;place-items:center}.aiq-ring>div{background:#fff;width:106px;height:106px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center}.aiq-ring strong{font-size:30px;color:#7240d2}.aiq-ring small{font-size:10px;color:#9789aa}.aiq-result-stats{display:flex;justify-content:center;gap:12px;margin-top:15px}.aiq-result-stats span{background:#f8f5ff;border-radius:11px;padding:9px 13px;font-size:11px}.aiq-result-stats b{font-size:16px;color:#7240d2}
+.aiq-review-title{font-size:13px;margin:12px 16px}.aiq-reviews{padding:0 14px 15px}.aiq-review{border:1px solid #ede6f6;border-radius:13px;margin-bottom:8px;overflow:hidden}.aiq-review summary{display:flex;gap:8px;align-items:center;cursor:pointer;padding:11px;font-size:11px;line-height:1.8;list-style:none}.aiq-review summary::-webkit-details-marker{display:none}.aiq-review summary>span:nth-child(2){flex:1}.aiq-review-mark{display:grid;place-items:center;width:23px;height:23px;border-radius:50%;flex:none;font-weight:800}.aiq-review-mark.ok{background:#e7f8ef;color:#238a58}.aiq-review-mark.bad{background:#fff0f0;color:#cb5360}.aiq-chevron{color:#a490c2}.aiq-review-body{padding:0 12px 12px 10px;font-size:11px;line-height:2;color:#625671}.aiq-review-body p{margin:4px 0}.aiq-correct{color:#198b5e;font-weight:750}.aiq-sync-error{color:#b15843;font-size:11px;margin:0 16px 12px}
+#composer #aiq-launch{background:#f1eaff;color:#7c46d8;border:1px solid #e8dcfb;border-radius:13px;width:39px;height:39px;font-size:19px;display:grid;place-items:center;box-shadow:none}
+.aiq-builder-backdrop{position:fixed;inset:0;z-index:99999;background:#1b113b7a;display:flex;align-items:flex-end;justify-content:center;padding:12px;direction:rtl}
+.aiq-builder{background:#fff;border-radius:23px;width:min(100%,440px);padding:18px;box-shadow:0 20px 60px #22114642;font-family:inherit;display:grid;gap:12px}
+.aiq-builder-head{display:flex;justify-content:space-between;align-items:flex-start}.aiq-builder-head strong{font-size:16px;color:#2e204e}.aiq-builder-head p{margin:4px 0;color:#8d7ba9;font-size:11px}.aiq-builder-head button{background:#f4effb;border:0;border-radius:50%;width:30px;height:30px;font-size:20px;color:#6542a3}
+.aiq-builder label{display:grid;gap:6px;font-size:12px;font-weight:750;color:#594875}.aiq-builder select,.aiq-builder input{width:100%;padding:12px;border:1px solid #e9e1f3;border-radius:11px;background:#faf9ff;font:inherit;font-size:12px;color:#302044}.aiq-builder-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.aiq-builder>.aiq-primary{width:100%;font-size:13px;margin-top:4px}
+@media(max-width:420px){#screen .aiq-card{border-radius:18px}.aiq-top{padding:13px 11px}.aiq-tag{font-size:8px}.aiq-options{padding:0 10px}.aiq-option{padding:10px 8px}.aiq-controls{padding:12px 11px}.aiq-question{padding:17px 13px 12px}}
+</style></head><body><div class="wrap"><header class="header"><div class="header-label" id="header-label">سلام! 👋</div><img class="brand-logo" src="/aimadrese-logo.png" alt="ای‌آی مدرسه"></header><main class="screen" id="screen"></main><div class="composer hidden" id="composer"><div id="attachment-preview" class="attachment-preview hidden"><span id="attachment-name"></span><button id="remove-attachment" type="button">حذف ×</button></div><input type="file" id="image-file" accept="image/jpeg,image/png,image/webp"><button id="pick-image" class="tool-btn" type="button">📷</button><button id="record-voice" class="tool-btn" type="button">🎙️</button><button id="aiq-launch" type="button" title="ساخت آزمون هوشمند" aria-label="ساخت آزمون هوشمند">▤</button><input id="question" placeholder="سؤالت رو بپرس..."><button id="send" class="send-btn">➤</button></div><nav class="nav hidden" id="nav"><button type="button" data-page="home" aria-label="خانه"><span class="nav-art" aria-hidden="true"><svg class="nav-graphic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/><path d="M10 21v-6h4v6"/></svg></span><span class="nav-caption">خانه</span></button><button type="button" data-page="courses" aria-label="دوره‌ها"><span class="nav-art" aria-hidden="true"><svg class="nav-graphic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="4"/><path d="m10 9 5 3-5 3z"/></svg></span><span class="nav-caption">دوره‌ها</span></button><button type="button" data-page="explore" aria-label="اکسپلور"><span class="nav-art" aria-hidden="true"><svg class="nav-graphic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.8 8.2-2.2 5.4-5.4 2.2 2.2-5.4z"/></svg></span><span class="nav-caption">اکسپلور</span></button><button type="button" data-page="assistant" aria-label="دستیار"><span class="nav-art" aria-hidden="true"><svg class="nav-graphic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="14" rx="5"/><path d="M12 4v3M10 4h4"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M9 17q3 2 6 0"/></svg></span><span class="nav-caption">دستیار</span></button><button type="button" data-page="account-profile" aria-label="پروفایل"><span class="nav-art" aria-hidden="true"><svg class="nav-graphic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 21v-2a7.5 7.5 0 0 1 15 0v2"/></svg></span><span class="nav-caption">پروفایل</span></button></nav></div><script>
 (()=>{const $=x=>document.querySelector(x),screen=$('#screen'),composer=$('#composer'),input=$('#question');
 const defaultState={name:'دانش‌آموز',lastName:'',grade:'نهم',tasks:[false,false,false],messages:[],page:'home',following:[]};
 const activeKey='aimadrese-demo-active-v2',profilesKey='aimadrese-demo-profiles-v2';let profiles={};try{profiles=JSON.parse(localStorage.getItem(profilesKey)||'{}')||{}}catch{};let activeId=localStorage.getItem(activeKey)||'',isRegistered=!!(activeId&&profiles[activeId]);let s=isRegistered?{...defaultState,...profiles[activeId]}:{...defaultState};const save=()=>{if(isRegistered&&activeId){profiles[activeId]={...s};localStorage.setItem(profilesKey,JSON.stringify(profiles))}};const profileId=(a,b,c,d)=>JSON.stringify([a.trim().toLocaleLowerCase('fa'),b.trim().toLocaleLowerCase('fa'),c,d.trim()]);const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const grades=['اول','دوم','سوم','چهارم','پنجم','ششم','هفتم','هشتم','نهم','دهم','یازدهم','دوازدهم'];
@@ -542,7 +580,7 @@ if(s.page==='teacher'){const t=teachers[s.selectedTeacher||0],id=s.selectedTeach
 if(s.page==='course-detail'){const id=s.selectedCourse||0,c=allCourses()[id]||courses[0];screen.innerHTML=`<div class="cover">${c.emoji}</div><h2>${esc(c.title)}</h2><div class="row"><p class="muted">${esc(c.desc||c.description||'دوره آموزشی')}</p><span class="price">${esc(c.price)} ریال</span></div>${c.teacherName?`<span class="chip">👨🏻‍🏫 ${esc(c.teacherName)}</span>`:`<button class="chip" data-teacher="${c.teacher}">${teachers[c.teacher]?.emoji||'👨🏻‍🏫'} ${esc(teachers[c.teacher]?.name||'مدرس')} ←</button>`}<div class="section-title">جلسات دوره</div>${(c.lessons||['آشنایی با مفاهیم پایه','حل مثال‌های کاربردی','تمرین و جمع‌بندی']).map((x,i)=>`<div class="card row"><div><h3>جلسه ${i+1}: ${esc(x)}</h3><p class="muted">${i===0?'پیش‌نمایش نمایشی':'نیازمند خرید دوره'}</p></div><span>▶</span></div>`).join('')}<button class="btn" style="width:100%" data-buy="${id}">خرید دوره · ${esc(c.price)} ریال</button><p class="notice">این ویدئوها و قیمت‌ها نمونه طراحی هستند؛ پخش و خرید واقعی هنوز متصل نشده‌اند.</p>`}
 if(s.page==='explore')screen.innerHTML=`<h2>اکسپلور ✨</h2><div class="chips"><button class="chip active">همه</button><button class="chip">ریاضی</button><button class="chip">علوم</button><button class="chip">فیزیک</button></div>${allCourses().map((c,i)=>`<div class="explore-card"><div class="explore-cover">${c.emoji}</div><div class="info"><h3>${esc(c.title)} رو در چند دقیقه یاد بگیر!</h3><div class="row"><p class="muted">${c.teacherName?esc(c.teacherName):teachers[c.teacher]?.name||'مدرس'} · ویدئوی آموزشی نمونه</p><button class="chip" data-course="${i}">مشاهده ←</button></div><span class="muted">♡ پسندیدن · ♧ ذخیره · ↗ اشتراک‌گذاری (نمایشی)</span></div></div>`).join('')}`;
 if(s.page==='plan')screen.innerHTML=`<h2>برنامه مطالعه و تمرین ☑️</h2><p class="muted">کارهای امروزت رو انجام بده تا پیشرفتت ثبت بشه.</p>${['مرور درس — ۲۵ دقیقه','حل تمرین — ۳۰ دقیقه','مرور نکات — ۱۵ دقیقه'].map((x,i)=>`<div class="card"><label><input type="checkbox" data-task="${i}" ${s.tasks[i]?'checked':''}> ${x}</label></div>`).join('')}<div class="card"><h3>پیشرفت امروز</h3><div class="progress"><div style="width:${s.tasks.filter(Boolean).length/3*100}%"></div></div><p class="muted">${s.tasks.filter(Boolean).length} از ۳ فعالیت</p></div><button class="btn" data-ask="از من یک آزمون کوتاه متناسب با پایه تحصیلی‌ام بگیر">آزمون با دستیار هوشمند</button>`;
-if(s.page==='assistant'){screen.innerHTML=s.messages.length?s.messages.map((m,i)=>`<div class="msg-wrap ${m.role==='user'?'user-wrap':''}"><div class="message ${m.role}">${m.role==='assistant'?formatAnswer(m.text):esc(m.text).replace(/\n/g,'<br>')}${m.mediaLabel?`<div>${esc(m.mediaLabel)}</div>`:''}</div>${m.role==='assistant'&&!m.pending&&i===s.messages.length-1?recommendationMarkup(1):''}${m.role==='assistant'&&!m.pending?`<div class="msg-actions"><button class="copy-btn" data-copy="${i}">📋 کپی پاسخ</button></div>`:''}</div>`).join(''):`<section class="am22-welcome" aria-label="خوشامدگویی دستیار هوشمند"><div class="am22-glow"></div><div class="am22-mascot-wrap"><div class="am22-orbit"></div><span class="am22-spark am22-spark-a">✦</span><span class="am22-spark am22-spark-b">✧</span><span class="am22-books">📚</span><div class="am22-bot"><span class="am22-antenna"></span><span class="am22-ear am22-ear-left"></span><span class="am22-ear am22-ear-right"></span><span class="am22-face"><i class="am22-eye"></i><i class="am22-eye"></i><b class="am22-smile"></b></span></div><span class="am22-bulb">💡</span></div><h2>سلام ${esc(s.name)} جان!</h2><div class="am22-underline"></div><p class="am22-desc">سؤال درسی بپرس، عکس بفرست یا ویس ضبط کن.</p><div class="am22-suggestions"><button type="button" data-ask="معادله درجه دوم را ساده توضیح بده">📖 ریاضی</button><button type="button" data-ask="از من آزمون بگیر">▤ آزمون</button><button type="button" data-ask="برای امتحان برنامه بده">▦ برنامه</button></div><div class="am22-wave am22-wave-one"></div><div class="am22-wave am22-wave-two"></div></section>`;screen.scrollTop=screen.scrollHeight}
+if(s.page==='assistant'){screen.innerHTML=s.messages.length?s.messages.map((m,i)=>`<div class="msg-wrap ${m.role==='user'?'user-wrap':''} ${m.quiz?'aiq-wrap':''}"><div class="message ${m.role} ${m.quiz?'aiq-bubble':''}">${m.quiz?aiqMarkup(m.quiz,i):(m.role==='assistant'?formatAnswer(m.text):esc(m.text).replace(/\n/g,'<br>'))}${m.mediaLabel?`<div>${esc(m.mediaLabel)}</div>`:''}</div>${m.role==='assistant'&&!m.quiz&&!m.pending&&i===s.messages.length-1?recommendationMarkup(1):''}${m.role==='assistant'&&!m.quiz&&!m.pending?`<div class="msg-actions"><button class="copy-btn" data-copy="${i}">📋 کپی پاسخ</button></div>`:''}</div>`).join(''):`<section class="am22-welcome" aria-label="خوشامدگویی دستیار هوشمند"><div class="am22-glow"></div><div class="am22-mascot-wrap"><div class="am22-orbit"></div><span class="am22-spark am22-spark-a">✦</span><span class="am22-spark am22-spark-b">✧</span><span class="am22-books">📚</span><div class="am22-bot"><span class="am22-antenna"></span><span class="am22-ear am22-ear-left"></span><span class="am22-ear am22-ear-right"></span><span class="am22-face"><i class="am22-eye"></i><i class="am22-eye"></i><b class="am22-smile"></b></span></div><span class="am22-bulb">💡</span></div><h2>سلام ${esc(s.name)} جان!</h2><div class="am22-underline"></div><p class="am22-desc">سؤال درسی بپرس، عکس بفرست یا ویس ضبط کن.</p><div class="am22-suggestions"><button type="button" data-ask="معادله درجه دوم را ساده توضیح بده">📖 ریاضی</button><button type="button" data-ask="از من آزمون بگیر">▤ آزمون</button><button type="button" data-ask="برای امتحان برنامه بده">▦ برنامه</button></div><div class="am22-wave am22-wave-one"></div><div class="am22-wave am22-wave-two"></div></section>`;screen.scrollTop=screen.scrollHeight}
 if(s.page==='profile')screen.innerHTML=`<h2>پروفایل من 👤</h2><div class="card"><label class="field-label">نام</label><input class="field" id="name" maxlength="40" value="${esc(s.name)}"><label class="field-label">نام خانوادگی</label><input class="field" id="lastName" maxlength="45" value="${esc(s.lastName||'')}"><label class="field-label">پایه تحصیلی</label><select class="field" id="grade">${grades.map(g=>`<option ${g===s.grade?'selected':''}>${g}</option>`).join('')}</select><button class="btn" id="save-profile">ذخیره تغییرات</button></div><div class="card"><h3>برای معلم‌ها 👩🏻‍🏫</h3><p class="muted">ساخت و انتشار دوره در دیتابیس مشترک Supabase</p><button class="btn" id="teacher-mode">ورود به پنل معلم</button><button class="chip" data-page="learning-analysis" style="margin-top:10px">تحلیل یادگیری من</button></div><div class="notice">ورود با هر کد فقط برای تست است. داده‌ها در مرورگر نگهداری می‌شوند و حساب امن نیست.</div><p><button class="chip" id="logout-guest">خروج از پنل</button></p>`;
 if(s.page==='teacher-studio')screen.innerHTML=`<h2>استودیوی معلم 🎬</h2><div class="studio-head"><h3>دوره آموزشی جدید بساز</h3><p class="muted">دوره پس از ثبت، در فهرست دوره‌ها و پیشنهادهای مرتبط این مرورگر قرار می‌گیرد.</p></div><form id="course-form"><label class="field-label">نام مدرس</label><input class="field" name="teacherName" required maxlength="70" placeholder="مثلاً استاد کریمی"><label class="field-label">عنوان دوره</label><input class="field" name="title" required maxlength="100" placeholder="مثلاً آموزش معادلات درجه یک"><label class="field-label">درس</label><select class="field" name="subject"><option>ریاضی</option><option>علوم</option><option>فیزیک</option><option>فارسی</option></select><label class="field-label">پایه تحصیلی</label><select class="field" name="grade">${grades.map(g=>`<option ${g===s.grade?'selected':''}>${g}</option>`).join('')}</select><label class="field-label">مباحث و سرفصل‌ها</label><textarea class="field" name="topics" required rows="3" maxlength="600" placeholder="معادله، مجهول، حل تمرین..."></textarea><label class="field-label">توضیحات دوره</label><textarea class="field" name="description" rows="3" maxlength="600" placeholder="دانش‌آموز چه چیزهایی یاد می‌گیرد؟"></textarea><label class="field-label">قیمت دوره (ریال)</label><input class="field" name="price" type="number" min="0" max="999999999" required placeholder="۳۹۰۰۰۰"><div class="upload">☁️<p>بارگذاری ویدئو هنوز به فضای ذخیره‌سازی متصل نیست</p></div><button class="btn" style="width:100%" type="submit">ثبت دوره و آماده‌سازی پیشنهاد</button></form><p class="notice">نسخه آزمایشی: ثبت دوره فقط در همین مرورگر انجام می‌شود و برای سایر کاربران منتشر نمی‌شود.</p>`;
 if(s.page==='course-analysis'){const c=allCourses()[s.selectedCourse||0];screen.innerHTML=`<h2>تحلیل هوشمند دوره</h2>${c?analysisMarkup(c):''}<button class="btn" data-page="courses" style="width:100%">مشاهده دوره‌ها</button><button class="chip" data-page="teacher-studio" style="margin-top:12px">افزودن دوره دیگر</button>`}
@@ -591,9 +629,248 @@ $('#record-voice').addEventListener('click',async()=>{
     recorder.start();$('#record-voice').classList.add('recording');$('#record-voice').textContent='⏹';
   }catch{alert('برای ضبط ویس، دسترسی میکروفون را در مرورگر فعال کن.')}
 });
+
+// V67 — Structured AI quiz inside the assistant message stream.
+// This code does not modify the private messenger, its header, reactions, or polling.
+const AIQ_PREFIX='[AIMADRESE_QUIZ_V1]';
+const AIQ_RESULT_PREFIX='[AIMADRESE_QUIZ_RESULT_V1]';
+const AIQ_ENDPOINT='https://aimadrese-gemini.sepehrkhodadadi84.workers.dev/chat';
+const aiqFa=n=>Number(n||0).toLocaleString('fa-IR');
+const aiqSafe=x=>esc(String(x??''));
+const aiqDigits=x=>String(x??'').replace(/[۰-۹]/g,c=>String('۰۱۲۳۴۵۶۷۸۹'.indexOf(c))).replace(/[٠-٩]/g,c=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(c)));
+const aiqId=()=>('quiz-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,10));
+function aiqIsRequest(q){
+ const t=aiqDigits(q).replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/\u200c/g,' ').trim();
+ if(!t)return false;
+ const asks=/(?:آزمون|تست|کوئیز|کوییز|امتحان|چهار\s*گزینه|سوال\s*تستی|سؤال\s*تستی)/.test(t);
+ const imperative=/(?:بگیر|بده|بساز|بزن|شروع|برگزار|طرح\s*کن|درست\s*کن|آماده\s*کن|می\s*خوام|می\s*خواهم|می\s*تونی|میتونی|بپرسی|ازم|از\s*من|حل\s*کنم)/.test(t);
+ return asks && (imperative || /^(?:آزمون|تست|کوئیز|کوییز)(?:\s|$)/.test(t)&&t.length<45 || /^\d{1,2}\s*(?:تا\s*)?(?:تست|سؤال|سوال)/.test(t));
+}
+function aiqParams(text,options={}){
+ const t=aiqDigits(text);
+ const countMatch=t.match(/(?:^|\D)(\d{1,2})\s*(?:تا|سوال|سؤال|تست|پرسش|سؤالی|سوالی)/);
+ const count=Math.min(12,Math.max(3,Number(options.count||countMatch?.[1]||5)));
+ const duration=Math.min(45*60,Math.max(90,Number(options.durationSeconds||count*60)));
+ return {count,duration,grade:String(appProfile?.grade||s.grade||'نهم'),topic:String(options.topic||'').slice(0,140),subject:String(options.subject||'').slice(0,45)};
+}
+function aiqPrompt(request,p){
+ return `تو طراح آزمون آموزشی برای دانش‌آموز ایرانی هستی. زبان پاسخ فارسی است.\n`+
+ `پایه تحصیلی: ${p.grade}. درخواست دقیق دانش‌آموز: «${request.slice(0,600)}».\n`+
+ (p.subject?`درس انتخاب‌شده: ${p.subject}.\n`:'')+(p.topic?`مبحث انتخاب‌شده: ${p.topic}.\n`:'')+
+ `دقیقاً ${p.count} سؤال چهارگزینه‌ای مستقل و صحیح، مناسب همین پایه و مبحث تولید کن. هر سؤال دقیقاً ۴ گزینه متمایز و فقط یک پاسخ صحیح داشته باشد. سؤالات متنوع، روشن و بدون ابهام باشند. در ریاضی، جواب و گزینه‌ها را با محاسبه بررسی کن. در صورت ابهام درباره فصل یا کتاب، سؤال‌های عمومی مرتبط با پایه بده و ادعای نقل مستقیم از کتاب نکن.\n`+
+ `فقط و فقط یک شیء JSON معتبر برگردان؛ هیچ متن اضافی، هیچ Markdown و هیچ کدبلاک ننویس. ساختار دقیق:\n`+
+ `{"title":"عنوان کوتاه آزمون","subject":"درس","topic":"مبحث","questions":[{"text":"صورت سؤال","options":["گزینه اول","گزینه دوم","گزینه سوم","گزینه چهارم"],"answer":0,"explanation":"توضیح کوتاه و دقیق پاسخ صحیح"}]}\n`+
+ `answer حتماً عدد صحیح صفر تا سه (اندیس گزینه درست از صفر) باشد. questions باید دقیقاً ${p.count} عضو داشته باشد. متن و توضیح هر سؤال مختصر باشد.`;
+}
+function aiqJson(payload){
+ let v=payload?.reply??payload?.response??payload?.text??payload;
+ if(v&&typeof v==='object'&&!Array.isArray(v)){
+  if(Array.isArray(v.questions))return v;
+  v=v.content??v.message??JSON.stringify(v);
+ }
+ if(Array.isArray(v))v=v.map(x=>x?.text??'').join('');
+ const t=String(v??'').trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
+ try{return JSON.parse(t)}catch{}
+ const start=t.indexOf('{'),end=t.lastIndexOf('}');
+ if(start>=0&&end>start){try{return JSON.parse(t.slice(start,end+1))}catch{}}
+ throw new Error('دستیار سؤال‌ها را در قالب معتبر برنگرداند. دوباره تلاش کن.');
+}
+function aiqNormalize(payload,params){
+ const v=aiqJson(payload),list=Array.isArray(v.questions)?v.questions:[];
+ const questions=[];
+ for(const item of list.slice(0,params.count)){
+  if(!item||typeof item!=='object')continue;
+  const text=String(item.text??item.question??'').trim().slice(0,240);
+  const rawOpts=item.options??item.choices;
+  if(!text||!Array.isArray(rawOpts)||rawOpts.length!==4)continue;
+  const options=rawOpts.map(o=>String(typeof o==='string'?o:(o?.text??'')).trim().slice(0,115));
+  if(options.some(o=>!o)||new Set(options).size!==4)continue;
+  let answer=item.answer??item.correctIndex??item.correct_index??item.correctAnswer;
+  if(answer===null||answer===undefined||String(answer).trim()==='')continue;
+  if(typeof answer==='string'&&options.includes(answer.trim()))answer=options.indexOf(answer.trim());
+  else if(typeof answer==='string'&&/^[A-Da-d]$/.test(answer.trim()))answer=answer.trim().toUpperCase().charCodeAt(0)-65;
+  else answer=Number(aiqDigits(String(answer??'')).replace(/[^\d-]/g,''));
+  if(!Number.isInteger(answer)||answer<0||answer>3)continue;
+  const explanation=String(item.explanation??item.reason??'').trim().slice(0,190);
+  questions.push({text,options,answer,explanation:explanation||'پاسخ صحیح در گزینه مشخص‌شده است.'});
+ }
+ if(questions.length<Math.max(2,Math.ceil(params.count*.7)))throw new Error('تعداد سؤال‌های معتبر کافی نبود. دوباره آزمون بساز.');
+ const quiz={id:aiqId(),title:String(v.title||'آزمون هوشمند').slice(0,75),subject:String(v.subject||params.subject||'آموزشی').slice(0,40),topic:String(v.topic||params.topic||'').slice(0,70),durationSeconds:params.duration,questions,answers:Array(questions.length).fill(null),index:0,status:'ready',startedAt:0,finishedAt:0,request:''};
+ return quiz;
+}
+function aiqEncode(quiz){
+ const data={v:1,id:quiz.id,title:quiz.title,subject:quiz.subject,topic:quiz.topic,durationSeconds:quiz.durationSeconds,questions:quiz.questions,request:quiz.request};
+ let out=AIQ_PREFIX+JSON.stringify(data);
+ if(out.length>11600){data.questions=data.questions.map(q=>({...q,explanation:q.explanation.slice(0,75)}));out=AIQ_PREFIX+JSON.stringify(data)}
+ if(out.length>11900)throw Error('حجم آزمون برای ذخیره‌سازی زیاد است؛ تعداد سؤال کمتری انتخاب کن.');
+ return out;
+}
+function aiqLocalKey(quiz){return 'aimadrese-aiq-v1:'+String(authSession?.user?.id||'guest')+':'+String(ai24Current||'none')+':'+quiz.id}
+function aiqStore(quiz){try{localStorage.setItem(aiqLocalKey(quiz),JSON.stringify({answers:quiz.answers,index:quiz.index,status:quiz.status,startedAt:quiz.startedAt,finishedAt:quiz.finishedAt}))}catch(e){console.warn('Quiz local progress:',e)}}
+function aiqApplyState(quiz,state){
+ if(!state||typeof state!=='object')return;
+ if(Array.isArray(state.answers))quiz.answers=quiz.questions.map((_,i)=>{const a=state.answers[i];return Number.isInteger(a)&&a>=0&&a<=3?a:null});
+ if(Number.isInteger(state.index))quiz.index=Math.max(0,Math.min(quiz.questions.length-1,state.index));
+ if(['ready','running','done'].includes(state.status))quiz.status=state.status;
+ if(Number.isFinite(state.startedAt))quiz.startedAt=state.startedAt;
+ if(Number.isFinite(state.finishedAt))quiz.finishedAt=state.finishedAt;
+}
+function aiqHydrateRows(rows){
+ const out=[],byId=new Map();
+ for(const row of rows||[]){
+  const c=String(row.content??'');
+  if(row.role==='assistant'&&c.startsWith(AIQ_PREFIX)){
+   try{
+    const d=JSON.parse(c.slice(AIQ_PREFIX.length));
+    if(!d?.id||!Array.isArray(d.questions)||!d.questions.length)throw Error('Bad quiz');
+    const quiz={...d,conversationId:ai24Current,status:'ready',answers:Array(d.questions.length).fill(null),index:0,startedAt:0,finishedAt:0};
+    try{aiqApplyState(quiz,JSON.parse(localStorage.getItem(aiqLocalKey(quiz))||'null'))}catch{}
+    out.push({role:'assistant',text:'',quiz});byId.set(quiz.id,quiz);
+   }catch(e){out.push({role:'assistant',text:'⚠️ این آزمون قابل نمایش نیست.'})}
+  }else if(row.role==='assistant'&&c.startsWith(AIQ_RESULT_PREFIX)){
+   try{const result=JSON.parse(c.slice(AIQ_RESULT_PREFIX.length));const quiz=byId.get(result.id);if(quiz){aiqApplyState(quiz,{...result,status:'done'});aiqStore(quiz)}}catch{}
+  }else out.push({role:row.role,text:c});
+ }
+ return out;
+}
+function aiqRemaining(quiz){return Math.max(0,Number(quiz.durationSeconds||0)-Math.floor((Date.now()-Number(quiz.startedAt||Date.now()))/1000))}
+function aiqTime(sec){const m=Math.floor(Math.max(0,sec)/60),s=Math.max(0,sec)%60;return aiqFa(m)+':'+String(s).padStart(2,'0').replace(/\d/g,x=>'۰۱۲۳۴۵۶۷۸۹'[Number(x)])}
+function aiqScore(quiz){return quiz.questions.reduce((n,q,i)=>n+(quiz.answers[i]===q.answer?1:0),0)}
+function aiqMarkup(quiz,index){
+ const title=aiqSafe(quiz.title||'آزمون هوشمند');
+ const head=`<div class="aiq-top"><span class="aiq-icon">✦</span><div><strong>${title}</strong><small>${aiqSafe(quiz.subject||'آزمون')} ${quiz.topic?' · '+aiqSafe(quiz.topic):''}</small></div><span class="aiq-tag">AI QUIZ</span></div>`;
+ if(quiz.status==='loading')return `<section class="aiq-card" dir="rtl" data-aiq-index="${index}">${head}<div class="aiq-loading"><span class="aiq-spinner"></span><strong>در حال طراحی سؤال‌ها...</strong><p>دستیار آزمون متناسب با پایه شما را می‌سازد.</p></div></section>`;
+ if(quiz.status==='error')return `<section class="aiq-card" dir="rtl" data-aiq-index="${index}">${head}<div class="aiq-error">${aiqSafe(quiz.error||'ساخت آزمون انجام نشد.')}</div><button type="button" class="aiq-primary" data-aiq-action="retry" data-aiq-index="${index}">تلاش دوباره</button></section>`;
+ const count=quiz.questions.length;
+ if(quiz.status==='ready')return `<section class="aiq-card" dir="rtl" data-aiq-index="${index}">${head}<div class="aiq-intro"><div class="aiq-intro-icon">📚</div><h3>آماده‌ای خودت رو محک بزنی؟</h3><p>پاسخ‌ها تا پایان آزمون نمایش داده نمی‌شن. می‌تونی بین سؤال‌ها جابه‌جا بشی.</p></div><div class="aiq-stats"><span>▤ ${aiqFa(count)} سؤال</span><span>◷ ${aiqTime(quiz.durationSeconds)}</span><span>✓ چهارگزینه‌ای</span></div><button type="button" class="aiq-primary" data-aiq-action="start" data-aiq-index="${index}">شروع آزمون <span>←</span></button></section>`;
+ if(quiz.status==='done'){
+  const correct=aiqScore(quiz),percent=Math.round(correct/count*100),wrong=count-correct;
+  const review=quiz.questions.map((q,i)=>{
+   const chosen=quiz.answers[i],ok=chosen===q.answer;
+   return `<details class="aiq-review"><summary><span class="aiq-review-mark ${ok?'ok':'bad'}">${ok?'✓':'×'}</span><span>سؤال ${aiqFa(i+1)} — ${aiqSafe(q.text)}</span><span class="aiq-chevron">⌄</span></summary><div class="aiq-review-body">${chosen===null?'<p>بدون پاسخ</p>':`<p>پاسخ شما: ${aiqSafe(q.options[chosen])}</p>`}<p class="aiq-correct">پاسخ درست: ${aiqSafe(q.options[q.answer])}</p><p>${aiqSafe(q.explanation)}</p></div></details>`;
+  }).join('');
+  return `<section class="aiq-card" dir="rtl" data-aiq-index="${index}">${head}<div class="aiq-result"><div class="aiq-ring" style="--aiq-score:${percent}"><div><strong>${aiqFa(percent)}٪</strong><small>نتیجه آزمون</small></div></div><h3>${percent>=80?'آفرین! عالی پیش رفتی 🎉':percent>=50?'خوب بود؛ با مرور بهتر می‌شی 💜':'فرصت خوبیه برای تمرین بیشتر 🌱'}</h3><div class="aiq-result-stats"><span><b>${aiqFa(correct)}</b> درست</span><span><b>${aiqFa(wrong)}</b> غلط یا نزده</span></div></div><h4 class="aiq-review-title">بررسی پاسخ‌ها</h4><div class="aiq-reviews">${review}</div>${quiz.syncError?'<p class="aiq-sync-error">نتیجه فعلاً روی همین دستگاه ذخیره شده است.</p><button type="button" class="aiq-secondary" data-aiq-action="sync" data-aiq-index="'+index+'">تلاش برای همگام‌سازی</button>':''}<button type="button" class="aiq-secondary" data-aiq-action="again" data-aiq-index="${index}">ساخت یک آزمون جدید</button></section>`;
+ }
+ const current=quiz.index||0,q=quiz.questions[current],remaining=aiqRemaining(quiz),answered=quiz.answers.filter(a=>a!==null).length;
+ const options=q.options.map((o,i)=>`<button type="button" class="aiq-option ${quiz.answers[current]===i?'selected':''}" data-aiq-action="answer" data-aiq-index="${index}" data-aiq-choice="${i}"><span class="aiq-option-letter">${'ابجد'[i]}</span><span>${aiqSafe(o)}</span><span class="aiq-option-check">${quiz.answers[current]===i?'✓':''}</span></button>`).join('');
+ return `<section class="aiq-card" dir="rtl" data-aiq-index="${index}">${head}<div class="aiq-running-meta"><span>سؤال ${aiqFa(current+1)} از ${aiqFa(count)}</span><span class="aiq-clock ${remaining<=30?'urgent':''}" data-aiq-clock="${index}">◷ ${aiqTime(remaining)}</span></div><div class="aiq-progress"><div style="width:${(current+1)/count*100}%"></div></div><h3 class="aiq-question">${aiqSafe(q.text)}</h3><div class="aiq-options">${options}</div><div class="aiq-answer-count">${aiqFa(answered)} سؤال پاسخ داده شده</div>${quiz.confirmFinish?'<p class="aiq-finish-warning">آزمون پایان پیدا کند؟ سؤال‌های بدون پاسخ، نادرست محاسبه می‌شوند.</p>':''}<div class="aiq-controls"><button type="button" class="aiq-secondary" data-aiq-action="prev" data-aiq-index="${index}" ${current===0?'disabled':''}>قبلی</button>${quiz.confirmFinish?`<button type="button" class="aiq-primary" data-aiq-action="finish" data-aiq-index="${index}">ثبت نتیجه</button>`:current===count-1?`<button type="button" class="aiq-primary" data-aiq-action="confirm" data-aiq-index="${index}">پایان آزمون</button>`:`<button type="button" class="aiq-primary" data-aiq-action="next" data-aiq-index="${index}">سؤال بعدی ←</button>`}</div><div class="aiq-dots">${quiz.questions.map((_,j)=>`<button type="button" class="${j===current?'active':''} ${quiz.answers[j]!==null?'answered':''}" aria-label="سؤال ${j+1}" data-aiq-action="goto" data-aiq-index="${index}" data-aiq-question="${j}"></button>`).join('')}</div></section>`;
+}
+async function aiqAsk(request,settings={}){
+ if(busy)return;
+ const text=String(request??'').trim();if(!text)return;
+ if(attachment){alert('برای آزمون فعلاً درخواست متنی بفرست؛ پیوست پشتیبانی نمی‌شود.');return}
+ const params=aiqParams(text,settings);
+ input.value='';s.page='assistant';s.messages.push({role:'user',text});
+ const index=s.messages.length;
+ s.messages.push({role:'assistant',text:'',pending:true,quiz:{status:'loading',title:'آزمون هوشمند',subject:params.subject||'آموزشی',topic:params.topic}});
+ busy=true;$('#send').disabled=true;render();
+ try{
+  if(!authSession||appProfile?.role!=='student')throw Error('برای آزمون، ابتدا وارد حساب دانش‌آموز شوید.');
+  await ai23SaveMessage('user',text);
+  async function requestQuiz(prompt){
+   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),55000);
+   let res;
+   try{res=await fetch(AIQ_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({messages:[{role:'user',content:prompt}],grade:params.grade})})}
+   finally{clearTimeout(timeout)}
+   const payload=await res.json().catch(()=>({error:'پاسخ نامعتبر از سرویس'}));
+   if(!res.ok)throw Error(String(payload.error||'خطای سرویس هوش مصنوعی: '+res.status).slice(0,220));
+   return payload;
+  }
+  let payload=await requestQuiz(aiqPrompt(text,params)),quiz;
+  try{quiz=aiqNormalize(payload,params)}catch(firstError){
+   // One bounded repair attempt when the Worker responds in prose instead of JSON.
+   const raw=String(payload?.reply??payload?.response??payload?.text??'').slice(0,7000);
+   const repair=`پاسخ قبلی ساختار JSON معتبر نداشت. ${raw?'این متن را به سؤال‌های چهارگزینه‌ای تبدیل کن: «'+raw+'».':'سؤال‌های چهارگزینه‌ای را دوباره بساز.'} درخواست اصلی: «${text}». پایه: ${params.grade}. تعداد: ${params.count}. فقط JSON با ساختار {"title":"...","subject":"...","topic":"...","questions":[{"text":"...","options":["...","...","...","..."],"answer":0,"explanation":"..."}]} برگردان. answer عدد صحیح 0 تا 3 است؛ هیچ توضیحی خارج از JSON ننویس.`;
+   payload=await requestQuiz(repair);quiz=aiqNormalize(payload,params);
+  }
+  quiz.request=text;quiz.conversationId=ai24Current;
+  const packed=aiqEncode(quiz);
+  await ai23SaveMessage('assistant',packed);
+  s.messages[index].quiz=quiz;s.messages[index].pending=false;aiqStore(quiz);
+  ai23TrackTopics(text).catch(e=>console.warn('Quiz topics:',e));
+ }catch(err){
+  const message=err?.name==='AbortError'?'زمان پاسخ‌گویی دستیار تمام شد. دوباره امتحان کن.':String(err?.message||'ساخت آزمون ناموفق بود.');
+  s.messages[index].quiz={status:'error',title:'آزمون هوشمند',error:message,request:text,params};
+  s.messages[index].pending=false;
+ }finally{busy=false;$('#send').disabled=false;render()}
+}
+function aiqIndex(i){const m=s.messages[Number(i)];return m?.role==='assistant'&&m.quiz?m.quiz:null}
+function aiqRefresh(index){if(s.page!=='assistant')return;const quiz=aiqIndex(index);const el=screen.querySelector('.aiq-card[data-aiq-index=\"'+Number(index)+'\"]');if(quiz&&el)el.outerHTML=aiqMarkup(quiz,Number(index))}
+async function aiqFinish(index,expired=false){
+ const quiz=aiqIndex(index);if(!quiz||quiz.status!=='running')return;
+ quiz.status='done';quiz.finishedAt=Date.now();quiz.confirmFinish=false;aiqStore(quiz);
+ aiqRefresh(index);await aiqSync(index);
+}
+async function aiqSync(index){
+ const quiz=aiqIndex(index);if(!quiz||quiz.status!=='done'||quiz.synced||quiz.syncing)return;
+ quiz.syncing=true;
+ try{
+  const a=await ai35RequireRole('student');
+  await sbRequest('/rest/v1/ai23_messages',{method:'POST',token:a.access_token,headers:{Prefer:'return=minimal'},body:JSON.stringify({student_id:a.user.id,conversation_id:quiz.conversationId||ai24Current,role:'assistant',content:AIQ_RESULT_PREFIX+JSON.stringify({id:quiz.id,answers:quiz.answers,index:quiz.index,startedAt:quiz.startedAt,finishedAt:quiz.finishedAt})})});
+  quiz.synced=true;quiz.syncError=false;ai24Refresh().catch(console.warn);
+ }catch(e){quiz.syncError=true;console.warn('Quiz result sync:',e)}
+ finally{quiz.syncing=false;aiqStore(quiz);aiqRefresh(index)}
+}
+function aiqAction(action,index,button){
+ const quiz=aiqIndex(index);if(!quiz)return;
+ if(action==='retry'){const old=quiz.request;s.messages.splice(Number(index),1);aiqAsk(old,quiz.params||{});return}
+ if(action==='again'){aiqAsk(quiz.request||'از من یک آزمون مشابه بگیر');return}
+ if(action==='sync'){aiqSync(index);return}
+ if(action==='start'&&quiz.status==='ready'){quiz.status='running';quiz.startedAt=Date.now();quiz.index=0;aiqStore(quiz);aiqRefresh(index);return}
+ if(quiz.status!=='running')return;
+ if(aiqRemaining(quiz)<=0){aiqFinish(index,true);return}
+ if(action==='answer'){
+  const choice=Number(button.dataset.aiqChoice);
+  if(Number.isInteger(choice)&&choice>=0&&choice<=3)quiz.answers[quiz.index]=choice;
+  quiz.confirmFinish=false;
+ }else if(action==='next')quiz.index=Math.min(quiz.questions.length-1,quiz.index+1);
+ else if(action==='prev')quiz.index=Math.max(0,quiz.index-1);
+ else if(action==='goto')quiz.index=Math.max(0,Math.min(quiz.questions.length-1,Number(button.dataset.aiqQuestion)||0));
+ else if(action==='confirm')quiz.confirmFinish=true;
+ else if(action==='finish'){aiqFinish(index);return}
+ else return;
+ aiqStore(quiz);aiqRefresh(index);
+}
+function aiqShowBuilder(){
+ if(document.getElementById('aiq-builder'))return;
+ const overlay=document.createElement('div');overlay.id='aiq-builder';overlay.className='aiq-builder-backdrop';overlay.dir='rtl';overlay.innerHTML=`<form class="aiq-builder" id="aiq-builder-form"><div class="aiq-builder-head"><div><strong>✦ ساخت آزمون هوشمند</strong><p>متناسب با پایه ${aiqSafe(appProfile?.grade||s.grade||'دانش‌آموز')}</p></div><button type="button" data-aiq-close aria-label="بستن">×</button></div><label>درس<select name="subject"><option>ریاضی</option><option>علوم</option><option>فارسی</option><option>فیزیک</option><option>شیمی</option><option>زیست‌شناسی</option><option>زبان انگلیسی</option><option>مطالعات اجتماعی</option><option>سایر</option></select></label><label>مبحث یا فصل<input name="topic" maxlength="100" placeholder="مثلاً فصل سوم، معادله‌ها" autocomplete="off"></label><div class="aiq-builder-grid"><label>تعداد سؤال<select name="count"><option value="5">۵ سؤال</option><option value="10">۱۰ سؤال</option><option value="12">۱۲ سؤال</option></select></label><label>زمان آزمون<select name="duration"><option value="300">۵ دقیقه</option><option value="600">۱۰ دقیقه</option><option value="900">۱۵ دقیقه</option><option value="1200">۲۰ دقیقه</option></select></label></div><button class="aiq-primary" type="submit">ساخت آزمون ←</button></form>`;
+ document.body.appendChild(overlay);
+ overlay.querySelector('[name=topic]').focus({preventScroll:true});
+}
+// Capture phase: quiz controls never fall through to legacy chat handlers.
+document.addEventListener('click',e=>{
+ const close=e.target.closest('[data-aiq-close]');
+ const launch=e.target.closest('#aiq-launch');
+ const button=e.target.closest('[data-aiq-action]');
+ if(!close&&!launch&&!button&&e.target?.id!=='aiq-builder')return;
+ e.preventDefault();e.stopImmediatePropagation();
+ if(close||e.target?.id==='aiq-builder'){document.getElementById('aiq-builder')?.remove();return}
+ if(launch){aiqShowBuilder();return}
+ if(button)aiqAction(button.dataset.aiqAction,button.dataset.aiqIndex,button);
+},true);
+document.addEventListener('submit',e=>{
+ if(e.target?.id!=='aiq-builder-form')return;
+ e.preventDefault();e.stopImmediatePropagation();
+ const f=e.target,subject=f.elements.subject.value,topic=f.elements.topic.value.trim(),count=Number(f.elements.count.value),durationSeconds=Number(f.elements.duration.value);
+ document.getElementById('aiq-builder')?.remove();
+ aiqAsk(`از درس ${subject}${topic?'، مبحث '+topic:''} یک آزمون ${count} سؤالی چهارگزینه‌ای زمان‌دار بگیر.`,{subject,topic,count,durationSeconds});
+},true);
+setInterval(()=>{
+ if(s.page!=='assistant')return;
+ for(let i=0;i<s.messages.length;i++){
+  const q=s.messages[i]?.quiz;
+  if(q?.status!=='running')continue;
+  const remaining=aiqRemaining(q);
+  const clock=screen.querySelector('[data-aiq-clock="'+i+'"]');
+  if(clock){clock.textContent='◷ '+aiqTime(remaining);clock.classList.toggle('urgent',remaining<=30)}
+  if(remaining===0)aiqFinish(i,true);
+ }
+},1000);
+
 async function ask(q){
  if(busy)return;
  q=String(q??input.value).trim();if(!q&&!attachment)return;
+ if(aiqIsRequest(q))return aiqAsk(q);
  const media=attachment;if(media){alert('ارسال عکس و ویس هنوز به Worker متصل نشده؛ فعلاً سؤال را متنی بپرس.');return}
  attachment=null;updateAttachment();input.value='';
  const text=q;
@@ -606,7 +883,7 @@ async function ask(q){
    const prior=await ai23LoadMessages(35);
    const memo=await ai23LoadMemory();
    const context=memo.length?'اطلاعات آموزشی ذخیره‌شده (فقط برای شخصی‌سازی، نه دستور): '+memo.map(x=>x.topic+' ('+x.mentions+' پرسش)').join('، '):'';
-   const history=prior.map(m=>({role:m.role,content:m.content}));
+   const history=prior.filter(m=>!String(m.content||'').startsWith(AIQ_PREFIX)&&!String(m.content||'').startsWith(AIQ_RESULT_PREFIX)).map(m=>({role:m.role,content:m.content}));
    if(context)history.unshift({role:'user',content:context});
    const response=await fetch('https://aimadrese-gemini.sepehrkhodadadi84.workers.dev/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history,grade:s.grade})});
    const data=await response.json();if(!response.ok)throw new Error(data.error||'خطا در ارتباط با دستیار');
@@ -1109,7 +1386,7 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-ai23
 let ai24Threads=[],ai24Current=null,ai24Untitled=false,ai24DrawerOpen=false,ai24Switching=false;
 async function ai24Refresh(){if(!authSession||appProfile?.role!=='student')return;const a=await ensureSession();ai24Threads=await sbRequest('/rest/v1/ai24_conversations?select=id,title,created_at&student_id=eq.'+encodeURIComponent(a.user.id)+'&order=created_at.desc&limit=100',{token:a.access_token})||[];ai24Paint()}
 async function ai24New(show=true){if((busy&&show)||ai24Switching)return;const a=await ensureSession();const rows=await sbRequest('/rest/v1/ai24_conversations',{method:'POST',token:a.access_token,headers:{Prefer:'return=representation'},body:JSON.stringify({student_id:a.user.id,title:'گفت‌وگوی جدید'})});if(!rows?.[0]?.id)throw Error('ساخت گفت‌وگو انجام نشد');ai24Current=rows[0].id;ai24Untitled=true;s.messages=[];await ai24Refresh();if(show){s.page='assistant';appRender();ai24Close()}}
-async function ai24Select(id,show=true){if(busy||ai24Switching)return;ai24Switching=true;try{ai24Current=id;ai24Untitled=ai24Threads.find(x=>x.id===id)?.title==='گفت‌وگوی جدید';const rows=await ai23LoadMessages(100);s.messages=rows.map(x=>({role:x.role,text:x.content}));if(show){s.page='assistant';appRender();ai24Close()}else if(s.page==='assistant')appRender()}finally{ai24Switching=false}}
+async function ai24Select(id,show=true){if(busy||ai24Switching)return;ai24Switching=true;try{ai24Current=id;ai24Untitled=ai24Threads.find(x=>x.id===id)?.title==='گفت‌وگوی جدید';const rows=await ai23LoadMessages(100);s.messages=aiqHydrateRows(rows);if(show){s.page='assistant';appRender();ai24Close()}else if(s.page==='assistant')appRender()}finally{ai24Switching=false}}
 async function ai24Delete(id){if(busy||!await ai56Confirm('این گفت‌وگو و پیام‌هایش حذف شود؟'))return;const a=await ensureSession();await sbRequest('/rest/v1/ai24_conversations?id=eq.'+encodeURIComponent(id)+'&student_id=eq.'+encodeURIComponent(a.user.id),{method:'DELETE',token:a.access_token});await ai24Refresh();if(ai24Current===id){ai24Current=null;s.messages=[];if(ai24Threads.length)await ai24Select(ai24Threads[0].id,false);else appRender()}ai24Paint()}
 function ai24Close(){ai24DrawerOpen=false;ai24Paint()}
 function ai24Paint(){let overlay=document.getElementById('ai24-overlay'),drawer=document.getElementById('ai24-drawer');if(!overlay){overlay=document.createElement('div');overlay.id='ai24-overlay';overlay.className='ai24-overlay';document.body.append(overlay)}if(!drawer){drawer=document.createElement('aside');drawer.id='ai24-drawer';drawer.className='ai24-drawer';drawer.setAttribute('aria-label','تاریخچه گفت‌وگوهای دستیار');document.body.append(drawer)}overlay.classList.toggle('open',ai24DrawerOpen);drawer.classList.toggle('open',ai24DrawerOpen);drawer.innerHTML='<div class="ai24-head"><strong>☰ گفت‌وگوهای من</strong><button class="ai24-close" data-ai24="close">بستن ×</button></div><div style="padding:12px"><button class="ai24-new" style="width:100%" data-ai24="new">＋ گفت‌وگوی جدید</button></div><div class="ai24-list">'+(ai24Threads.length?ai24Threads.map(x=>'<div class="ai24-item '+(x.id===ai24Current?'active':'')+'"><button class="ai24-item-main" data-ai24-select="'+esc(x.id)+'"><strong>'+esc(x.title||'گفت‌وگو')+'</strong><small>'+new Date(x.created_at).toLocaleDateString('fa-IR')+'</small></button><button class="ai24-delete" title="حذف گفت‌وگو" data-ai24-delete="'+esc(x.id)+'">🗑</button></div>').join(''):'<p class="ai24-empty">هنوز گفت‌وگویی ذخیره نشده است.</p>')+'</div>';
