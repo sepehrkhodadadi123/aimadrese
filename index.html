@@ -1800,8 +1800,23 @@ for(const eventName of ['loadedmetadata','timeupdate','play','pause','ended','du
  const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const key=id=>'aimadrese-reaction-v54-'+(document.querySelector('[data-chat-mid]')?.closest('.v8-chat')?.dataset?.id||'')+'-'+id;
 
- function reactionsDraw(){document.querySelectorAll('[data-v54-reaction-for]').forEach(n=>{try{n.textContent=localStorage.getItem(key(n.dataset.v54ReactionFor))||''}catch{}})}
- const observer=new MutationObserver(()=>{if(document.querySelector('[data-v54-reaction-for]'))reactionsDraw()});
+ // Keep reaction labels in sync without triggering a self-sustaining MutationObserver loop.
+ function reactionsDraw(){
+  document.querySelectorAll('[data-v54-reaction-for]').forEach(n=>{
+   try{
+    const next=localStorage.getItem(key(n.dataset.v54ReactionFor))||'';
+    if(n.textContent!==next)n.textContent=next;
+   }catch(err){console.warn('Reaction rendering:',err)}
+  });
+ }
+ const observer=new MutationObserver(records=>{
+  // Ignore mutations caused by reaction text, typing indicators and unrelated UI.
+  const chatAdded=records.some(r=>Array.from(r.addedNodes).some(n=>
+   (n.nodeType===1||n.nodeType===11)&&
+   (n.matches?.('[data-v54-reaction-for]')||n.querySelector?.('[data-v54-reaction-for]'))
+  ));
+  if(chatAdded)reactionsDraw();
+ });
  observer.observe(document.body,{childList:true,subtree:true});
  function pickerRender(){
   const p=document.getElementById('v54-picker');if(!p)return;
