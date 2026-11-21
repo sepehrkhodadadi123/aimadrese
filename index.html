@@ -732,7 +732,7 @@ const courses=[{title:'معادلات درجه یک',teacher:0,emoji:'📐',pric
  // دوره‌های جدید از Supabase بارگیری می‌شوند؛ دوره‌های نمایشی ثابت باقی می‌مانند.
  const localCoursesKey='aimadrese-teacher-courses-v1';
  let addedCourses=[];let ownedCourses=[];let authSession=null;let teacherError='';let teacherBusy=false;let editingCourseId=null;
- const SB_URL='https://foznqubojmiizvohojkn.supabase.co', SB_KEY='sb_publishable_CdpbMrbkXHqenFDLfZ862Q_bICiitax', AUTH_KEY='aimadrese-supabase-teacher-session-v1';
+ const SB_URL='https://94-184-25-78.sslip.io', SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzk1MjQ5ODI0LCJleHAiOjE5NTI5Mjk4MjR9.6DEcI_1HAn6e7P-DUxFTK3PFkDxzTpYe_ju881E9sxQ', AUTH_KEY='aimadrese-supabase-teacher-session-v1';
  try{authSession=JSON.parse(localStorage.getItem(AUTH_KEY)||'null')}catch{}
  const allCourses=()=>[...courses,...addedCourses];
  function remoteCourse(c){return {id:c.id,teacherId:c.teacher_id,teacherName:c.teacher_name,title:c.title,subject:c.subject,grade:c.grade,topics:c.topics,description:c.description,price:String(c.price),emoji:c.emoji||'📚',status:c.status,desc:'دوره آموزشی',lessons:String(c.topics||'').split(/[،,\n]/).map(x=>x.trim()).filter(Boolean).slice(0,8)}}
